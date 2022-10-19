@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   AspectRatio,
   Box,
@@ -6,10 +6,10 @@ import {
   Container,
   Heading,
   Stack,
-} from "@chakra-ui/react";
-import { Document, Page, pdfjs } from "react-pdf";
-import { ProfileData } from "../../models/ProfileData";
-import { createPdfFrom } from "../../services/PdfService";
+} from '@chakra-ui/react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import { createPdfFrom } from '../../services/PdfService';
+import { ProfileData } from '../../@types';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -18,13 +18,13 @@ export default function PdfForm() {
 
   async function loadDataFromApiAndFillPdf() {
     const profileData: ProfileData = {
-      Firstname: "Aku",
-      Lastname: "Ankka",
+      Firstname: 'Aku',
+      Lastname: 'Ankka',
     };
 
-    const bytes = await fetch("./form.pdf").then((res) => res.arrayBuffer());
+    const bytes = await fetch('./form.pdf').then(res => res.arrayBuffer());
 
-    await createPdfFrom(bytes, profileData).then((result) => {
+    await createPdfFrom(bytes, profileData).then(result => {
       setFile(new Blob([result]));
     });
   }
@@ -40,7 +40,7 @@ export default function PdfForm() {
         </Heading>
         <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
           <AspectRatio ratio={1 / 1.4142}>
-            <Document file={file ?? "./form.pdf"}>
+            <Document file={file ?? './form.pdf'}>
               <Page key={1} pageNumber={1} />
             </Document>
           </AspectRatio>

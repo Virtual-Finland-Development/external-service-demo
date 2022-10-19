@@ -1,11 +1,18 @@
-import React from "react";
-import "./App.css";
-import PdfForm from "./components/PdfForm/PdfForm";
+import React from 'react';
+import './App.css';
+import RegistrationDataForm from './components/RegistrationDataForm/RegistrationDataForm';
 
 export default function App() {
+  let data;
   return (
     <div className="App">
-      <PdfForm></PdfForm>
+      {
+        // TODO: Add header
+      }
+      <RegistrationDataForm profileApiData={data} />
+      {
+        // TODO: Add footer
+      }
     </div>
   );
 }
