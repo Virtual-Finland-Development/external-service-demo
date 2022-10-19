@@ -92,16 +92,13 @@ function AppProvider({ children }: AppProviderProps) {
   }, []);
 
   /**
-   * Fetch user profile. Set user as logged in.
+   * Verify api user after authentication.
    */
-  const getUserProfileAndLogIn = useCallback(async () => {
+  const verifyUser = useCallback(async () => {
     try {
-      const response = await api.user.get();
-      const userProfile: UserProfile = response.data;
-
-      dispatch({ type: ActionTypes.SET_LOADING, loading: false });
+      await api.user.verify();
       dispatch({ type: ActionTypes.LOG_IN });
-      dispatch({ type: ActionTypes.SET_PROFILE, userProfile });
+      dispatch({ type: ActionTypes.SET_LOADING, loading: false });
     } catch (error: any) {
       dispatch({ type: ActionTypes.SET_ERROR, error });
       toast({
@@ -114,26 +111,6 @@ function AppProvider({ children }: AppProviderProps) {
       });
     }
   }, [toast]);
-
-  /**
-   * Verify api user after authentication.
-   */
-  const verifyUser = useCallback(async () => {
-    try {
-      await api.user.verify();
-      getUserProfileAndLogIn();
-    } catch (error: any) {
-      dispatch({ type: ActionTypes.SET_ERROR, error });
-      toast({
-        title: 'Error.',
-        description:
-          error?.message || 'Something went wrong, please try again later.',
-        status: 'error',
-        duration: 50000,
-        isClosable: true,
-      });
-    }
-  }, [getUserProfileAndLogIn, toast]);
 
   /**
    * Store auth keys to session storage, continue to verify user after authentication (Auth.tsx).
@@ -185,12 +162,11 @@ function AppProvider({ children }: AppProviderProps) {
   );
 
   /**
-   * If auth keys provided in session storage, and if token is not expired, try to fetch user profile and log user in.
+   * If auth keys provided in session storage, and if token is not expired, log in user.
    */
   useEffect(() => {
     if (validLoginState()) {
-      dispatch({ type: ActionTypes.SET_LOADING, loading: true });
-      getUserProfileAndLogIn();
+      dispatch({ type: ActionTypes.LOG_IN });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

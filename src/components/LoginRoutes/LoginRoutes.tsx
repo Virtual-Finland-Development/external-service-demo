@@ -2,19 +2,10 @@ import { Routes, Route, Outlet } from 'react-router-dom';
 import { Flex } from '@chakra-ui/react';
 
 // components
-/* import Login from '../Login/Login';
-import Auth from '../Auth/Auth';
-import Profile from '../Profile/Profile';
-import PageNotFound from '../PageNotFound/PageNotFound'; */
 import Login from '../Login/Login';
 import Auth from '../Auth/Auth';
 import AuthRedirect from '../AuthRedirect/AuthRedirect';
-
-const PageNotFound = () => (
-  <div>
-    <h3>404 page not found component</h3>
-  </div>
-);
+import PageNotFound from '../PageNotFound/PageNotFound';
 
 export default function LoginRoutes() {
   return (
