@@ -9,7 +9,7 @@ import LoginRoutes from '../LoginRoutes/LoginRoutes';
 // components
 import Loading from '../Loading/Loading';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import PdfForm from '../PdfForm/PdfForm';
+import AuthenticatedContainer from '../AuthenticatedContainer/AuthenticatedContainer';
 
 export default function AppRoot() {
   return (
@@ -35,7 +35,7 @@ export default function AppRoot() {
             );
           }
 
-          return !authenticated ? <LoginRoutes /> : <PdfForm />;
+          return !authenticated ? <LoginRoutes /> : <AuthenticatedContainer />;
         }}
       </AppConsumer>
     </AppProvider>

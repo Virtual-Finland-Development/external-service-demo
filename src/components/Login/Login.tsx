@@ -43,7 +43,7 @@ export default function Login() {
   return (
     <Container maxW="full" centerContent>
       <Box
-        bg="#02054B"
+        bg="blue.900"
         color="white"
         borderRadius="lg"
         m={{ sm: 4, md: 16, lg: 10 }}
@@ -57,7 +57,7 @@ export default function Login() {
             gap={{ base: 10, md: 20 }}
           >
             <Box textAlign={{ base: 'center', md: 'left' }}>
-              <Heading>Registration service</Heading>
+              <Heading>Foreigner Registration Service</Heading>
               <Text mt={{ sm: 3, md: 3, lg: 5 }} color="gray.400">
                 Choose one of the login types to continue
               </Text>
@@ -81,7 +81,7 @@ export default function Login() {
                     Login with Testbed
                   </Button>
                   <Button
-                    justifyContent={isLoading ? 'center' : 'start'}
+                    justifyContent="start"
                     bg="blue.500"
                     color="white"
                     _hover={{}}
@@ -92,7 +92,7 @@ export default function Login() {
                     Login with Sinuna
                   </Button>
                   <Button
-                    justifyContent={isLoading ? 'center' : 'start'}
+                    justifyContent="start"
                     bg="blue.500"
                     color="white"
                     _hover={{}}
