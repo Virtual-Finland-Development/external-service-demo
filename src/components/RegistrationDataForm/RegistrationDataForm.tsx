@@ -12,7 +12,12 @@ import {
   Spacer,
   Stack,
 } from '@chakra-ui/react';
-import { IdentityType, ProfileData, Sex } from '../../@types';
+import {
+  IdentityType,
+  InformationRegistrationReason,
+  ProfileData,
+  Sex,
+} from '../../@types';
 
 interface Props {
   profileApiData: ProfileData | undefined;
@@ -26,7 +31,7 @@ export default function RegistrationDataForm(props: Props) {
         <p>Input information about your registration</p>
       </Container>
       <Container p={4} bg={'whiteAlpha.300'}>
-        <FormControl>
+        <FormControl isRequired>
           <Flex direction={'column'} gap={5}>
             <Flex>
               <Flex direction={'column'} grow={1}>
@@ -151,11 +156,19 @@ export default function RegistrationDataForm(props: Props) {
               <Box>
                 <RadioGroup>
                   <Stack direction={'column'}>
-                    <Radio value={'1'}>Working in Finland</Radio>
-                    <Radio value={'1'}>
+                    <Radio
+                      value={InformationRegistrationReason.WorkingInFinland}
+                    >
+                      Working in Finland
+                    </Radio>
+                    <Radio
+                      value={
+                        InformationRegistrationReason.OperationOfTradeProfessionInFinland
+                      }
+                    >
                       Operation of a trade of profession in Finland
                     </Radio>
-                    <Radio value={'1'}>
+                    <Radio value={InformationRegistrationReason.Other}>
                       Other particular reason (please give details):
                     </Radio>
                     <Input></Input>
