@@ -36,6 +36,25 @@ export default function AuthRedirect() {
   const authProviderParam = queryParams.get('provider');
   const loginCodeParam = queryParams.get('loginCode');
   const logOutParam = queryParams.get('logout');
+  const errorParam = queryParams.get('error');
+  const errorType = queryParams.get('type');
+  const authError = errorParam && errorType === 'danger';
+
+  /**
+   * Catch any auth errors, on either LoginRequest / LogOutRequest intent
+   */
+  useEffect(() => {
+    if (authError) {
+      setError({ message: errorParam });
+      toast({
+        title: 'Error.',
+        description: errorParam,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  }, [authError, errorParam, toast]);
 
   /**
    * Handle authentication.
@@ -101,10 +120,16 @@ export default function AuthRedirect() {
       ) {
         handleAuthentication(authProviderParam as AuthProvider);
       }
-    } else {
+    } else if (!authError) {
       navigate('/');
     }
-  }, [authProviderParam, handleAuthentication, loginCodeParam, navigate]);
+  }, [
+    authError,
+    authProviderParam,
+    handleAuthentication,
+    loginCodeParam,
+    navigate,
+  ]);
 
   /**
    * Handle user log out, if Auth GW log out redirect occured.
