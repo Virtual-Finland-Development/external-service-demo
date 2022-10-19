@@ -4,8 +4,8 @@ export interface ProfileFormData {
   GivenName: string;
   PreviousGivenNames: string;
   DateOfBirth: string;
-  Sex: string;
-  RegistrationId: string;
+  Sex: Sex;
+  RegistrationIdentityType: RegistrationIdentityType;
   CountryOfOrigin: string;
   DistrictOfOrigin: string;
   NativeLanguage: string;
@@ -15,7 +15,7 @@ export interface ProfileFormData {
   AddressAbroad: string;
   DateOfArrivalInFinland: string;
   EndDateOfStayInFinland: string;
-  ReasonForRecordingInformation: string;
+  ReasonForRecordingInformation: InformationRegistrationReason;
 }
 
 export interface ProfileData {
@@ -24,11 +24,11 @@ export interface ProfileData {
 }
 
 export enum Sex {
-  Male = 'SEX_MALE',
-  Female = 'SEX_FEMALE',
+  Male = 'MALE',
+  Female = 'FEMALE',
 }
 
-export enum IdentityType {
+export enum RegistrationIdentityType {
   PersonalIdentityCode = 'PERSONAL_IDENTITY_CODE',
   TaxIdentityNumber = 'TAX_IDENTITY_NUMBER',
 }
@@ -36,5 +36,5 @@ export enum IdentityType {
 export enum InformationRegistrationReason {
   WorkingInFinland = 'WORKING_IN_FINLAND',
   OperationOfTradeProfessionInFinland = 'OPERATION_OF_TRADE_PROFESSION_IN_FINLAND',
-  Other = 'OTHER'
+  Other = 'OTHER',
 }

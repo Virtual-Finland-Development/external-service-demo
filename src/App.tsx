@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
 import RegistrationDataForm from './components/RegistrationDataForm/RegistrationDataForm';
+import { ProfileData } from './@types';
 
 export default function App() {
-  let data;
+  let data: ProfileData | undefined;
+
   return (
     <div className="App">
       {
