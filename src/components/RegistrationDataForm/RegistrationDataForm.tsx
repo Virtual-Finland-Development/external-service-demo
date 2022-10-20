@@ -48,7 +48,7 @@ export default function RegistrationDataForm(props: Props) {
   const doSubmit = useCallback(
     async (values: any) => {
       try {
-        let payload: Partial<ProfileFormData> = {};
+        let payload: Partial<ProfileFormData>;
         const dirtyKeys = Object.keys(dirtyFields);
         payload = { ...values };
         console.log(payload);
@@ -155,14 +155,14 @@ export default function RegistrationDataForm(props: Props) {
             </Flex>
 
             <Flex>
-              <Flex direction={'column'}>
+              <Flex direction={'column'} grow={1}>
                 <FormControl id="countryOfOrigin">
                   <FormLabel>Country where you were born</FormLabel>
                   <Input {...register('CountryOfOrigin')} />
                 </FormControl>
               </Flex>
               <Spacer />
-              <Flex direction={'column'}>
+              <Flex direction={'column'} grow={1}>
                 <FormControl id="districtOfOrigin">
                   <FormLabel>The district where you were born</FormLabel>
                   <Input {...register('DistrictOfOrigin')} />
@@ -224,42 +224,41 @@ export default function RegistrationDataForm(props: Props) {
               </Flex>
             </Flex>
 
-            <Heading size={'sm'}>
-              The reason for recording information in the Population Information
-              System (Check the correct alternative and enter the related
-              additional information.)
-            </Heading>
-
             <Flex>
-              <Box>
-                <FormControl id="reasonForRecordingInformation">
-                  <RadioGroup>
-                    <Stack direction={'column'}>
-                      <Radio
-                        {...register('ReasonForRecordingInformation')}
-                        value={InformationRegistrationReason.WorkingInFinland}
-                      >
-                        Working in Finland
-                      </Radio>
-                      <Radio
-                        {...register('ReasonForRecordingInformation')}
-                        value={
-                          InformationRegistrationReason.OperationOfTradeProfessionInFinland
-                        }
-                      >
-                        Operation of a trade of profession in Finland
-                      </Radio>
-                      <Radio
-                        {...register('ReasonForRecordingInformation')}
-                        value={InformationRegistrationReason.Other}
-                      >
-                        Other particular reason (please give details):
-                      </Radio>
-                      <Input />
-                    </Stack>
-                  </RadioGroup>
-                </FormControl>
-              </Box>
+              <FormControl id="reasonForRecordingInformation">
+                <FormLabel>
+                  <Heading size={'sm'}>
+                    The reason for recording information in the Population
+                    Information System (Check the correct alternative and enter
+                    the related additional information.)
+                  </Heading>
+                </FormLabel>
+                <RadioGroup>
+                  <Stack direction={'column'}>
+                    <Radio
+                      {...register('ReasonForRecordingInformation')}
+                      value={InformationRegistrationReason.WorkingInFinland}
+                    >
+                      Working in Finland
+                    </Radio>
+                    <Radio
+                      {...register('ReasonForRecordingInformation')}
+                      value={
+                        InformationRegistrationReason.OperationOfTradeProfessionInFinland
+                      }
+                    >
+                      Operation of a trade of profession in Finland
+                    </Radio>
+                    <Radio
+                      {...register('ReasonForRecordingInformation')}
+                      value={InformationRegistrationReason.Other}
+                    >
+                      Other particular reason (please give details):
+                    </Radio>
+                    <Input />
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
             </Flex>
             <Flex>
               <Button
