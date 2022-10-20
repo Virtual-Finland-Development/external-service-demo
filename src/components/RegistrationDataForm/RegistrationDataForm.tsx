@@ -66,41 +66,51 @@ export default function RegistrationDataForm(props: Props) {
       </Container>
       <Container p={4} bg={'whiteAlpha.300'}>
         <form onSubmit={handleSubmit(doSubmit)}>
-          <FormControl>
-            <Flex direction={'column'} gap={5}>
-              <Flex>
-                <Flex direction={'column'} grow={1}>
+          <Flex direction={'column'} gap={5}>
+            <Flex>
+              <Flex direction={'column'} grow={1}>
+                <FormControl id="familyName">
                   <FormLabel>Family name</FormLabel>
                   <Input
                     {...register('FamilyName')}
                     defaultValue={props.profileApiData?.Lastname}
                   />
-                </Flex>
-                <Spacer />
-                <Flex direction={'column'} grow={1}>
+                </FormControl>
+              </Flex>
+              <Spacer />
+              <Flex direction={'column'} grow={1}>
+                <FormControl id="previousFamilyNames">
                   <FormLabel>Previous family names</FormLabel>
                   <Input {...register('PreviousFamilyNames')} />
-                </Flex>
+                </FormControl>
               </Flex>
+            </Flex>
 
-              <Flex>
-                <Flex direction={'column'} grow={1}>
+            <Flex>
+              <Flex direction={'column'} grow={1}>
+                <FormControl id="givenName">
                   <FormLabel>Given names</FormLabel>
                   <Input {...register('GivenName')} type={'text'} />
-                </Flex>
-                <Spacer />
-                <Flex direction={'column'} grow={1}>
+                </FormControl>
+              </Flex>
+              <Spacer />
+              <Flex direction={'column'} grow={1}>
+                <FormControl id="previousGivenName">
                   <FormLabel>Previous given names</FormLabel>
                   <Input {...register('PreviousGivenNames')} />
-                </Flex>
+                </FormControl>
               </Flex>
+            </Flex>
 
-              <Flex gap={2}>
-                <Flex direction={'column'}>
+            <Flex gap={2}>
+              <Flex direction={'column'}>
+                <FormControl id="dateOfBirth">
                   <FormLabel>Date of birth</FormLabel>
                   <Input {...register('DateOfBirth')} />
-                </Flex>
-                <Flex direction={'column'}>
+                </FormControl>
+              </Flex>
+              <Flex direction={'column'}>
+                <FormControl id="sex">
                   <FormLabel>Sex</FormLabel>
                   <RadioGroup>
                     <Stack direction={'column'}>
@@ -112,8 +122,10 @@ export default function RegistrationDataForm(props: Props) {
                       </Radio>
                     </Stack>
                   </RadioGroup>
-                </Flex>
-                <Flex direction={'column'}>
+                </FormControl>
+              </Flex>
+              <Flex direction={'column'}>
+                <FormControl id="registrationIdentityType">
                   <FormLabel>
                     Personal identity code or Tax id no. in the country of
                     residence
@@ -137,69 +149,89 @@ export default function RegistrationDataForm(props: Props) {
                     </RadioGroup>
                     <Input />
                   </Stack>
-                </Flex>
+                </FormControl>
               </Flex>
+            </Flex>
 
-              <Flex>
-                <Flex direction={'column'}>
+            <Flex>
+              <Flex direction={'column'}>
+                <FormControl id="countryOfOrigin">
                   <FormLabel>Country where you were born</FormLabel>
                   <Input {...register('CountryOfOrigin')} />
-                </Flex>
-                <Spacer />
-                <Flex direction={'column'}>
+                </FormControl>
+              </Flex>
+              <Spacer />
+              <Flex direction={'column'}>
+                <FormControl id="districtOfOrigin">
                   <FormLabel>The district where you were born</FormLabel>
                   <Input {...register('DistrictOfOrigin')} />
-                </Flex>
+                </FormControl>
               </Flex>
+            </Flex>
 
-              <Flex gap={2}>
-                <Flex direction={'column'}>
+            <Flex gap={2}>
+              <Flex direction={'column'}>
+                <FormControl id="nativeLanguage">
                   <FormLabel>Native language</FormLabel>
                   <Input {...register('NativeLanguage')} />
-                </Flex>
-                <Flex direction={'column'}>
+                </FormControl>
+              </Flex>
+              <Flex direction={'column'}>
+                <FormControl id="occupation">
                   <FormLabel>Occupation</FormLabel>
                   <Input {...register('Occupation')} />
-                </Flex>
-                <Flex direction={'column'}>
+                </FormControl>
+              </Flex>
+              <Flex direction={'column'}>
+                <FormControl id="citizenship">
                   <FormLabel>Citizenship</FormLabel>
                   <Input {...register('Citizenship')} />
-                </Flex>
+                </FormControl>
               </Flex>
+            </Flex>
 
-              <Flex direction={'column'}>
+            <Flex direction={'column'}>
+              <FormControl id="addressInFinland">
                 <FormLabel>Address in Finland</FormLabel>
                 <Input {...register('AddressInFinland')} />
-              </Flex>
+              </FormControl>
+            </Flex>
 
-              <Flex direction={'column'}>
+            <Flex direction={'column'}>
+              <FormControl id="addressAbroad">
                 <FormLabel>Address abroad</FormLabel>
                 <Input {...register('AddressAbroad')} />
-              </Flex>
+              </FormControl>
+            </Flex>
 
-              <Flex gap={2}>
-                <Flex direction={'column'}>
+            <Flex gap={2}>
+              <Flex direction={'column'}>
+                <FormControl id="dateOfArrivalInFinland">
                   <FormLabel>Date of arrival in Finland</FormLabel>
                   <Input {...register('DateOfArrivalInFinland')}></Input>
-                </Flex>
-                <Spacer />
-                <Flex direction={'column'}>
+                </FormControl>
+              </Flex>
+              <Spacer />
+              <Flex direction={'column'}>
+                <FormControl id="endDateOfStayInFinland">
                   <FormLabel>
                     What is the latest estimated end date of your stay in
                     Finland?
                   </FormLabel>
                   <Input {...register('EndDateOfStayInFinland')} />
-                </Flex>
+                </FormControl>
               </Flex>
+            </Flex>
 
-              <Heading size={'sm'}>
-                The reason for recording information in the Population
-                Information System (Check the correct alternative and enter the
-                related additional information.)
-              </Heading>
+            <Heading size={'sm'}>
+              The reason for recording information in the Population Information
+              System (Check the correct alternative and enter the related
+              additional information.)
+            </Heading>
 
-              <Flex>
-                <Box>
+            <Flex>
+              <Box>
+                <FormControl id="reasonForRecordingInformation">
                   <RadioGroup>
                     <Stack direction={'column'}>
                       <Radio
@@ -225,15 +257,15 @@ export default function RegistrationDataForm(props: Props) {
                       <Input />
                     </Stack>
                   </RadioGroup>
-                </Box>
-              </Flex>
-              <Flex>
-                <Button colorScheme={'blue'} type={'submit'}>
-                  Preview
-                </Button>
-              </Flex>
+                </FormControl>
+              </Box>
             </Flex>
-          </FormControl>
+            <Flex>
+              <Button colorScheme={'blue'} type={'submit'}>
+                Preview
+              </Button>
+            </Flex>
+          </Flex>
         </form>
       </Container>
     </Box>
