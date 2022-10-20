@@ -21,6 +21,7 @@ import {
 } from '../../@types';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { ViewIcon } from '@chakra-ui/icons';
 
 interface Props {
   profileApiData: ProfileData | undefined;
@@ -261,7 +262,11 @@ export default function RegistrationDataForm(props: Props) {
               </Box>
             </Flex>
             <Flex>
-              <Button colorScheme={'blue'} type={'submit'}>
+              <Button
+                colorScheme={'blue'}
+                type={'submit'}
+                leftIcon={<ViewIcon />}
+              >
                 Preview
               </Button>
             </Flex>
