@@ -52,8 +52,8 @@ export default function RegistrationDataForm(props: Props) {
         const dirtyKeys = Object.keys(dirtyFields);
         payload = { ...values };
         console.log(payload);
-      } finally {
-        console.log('lol nope');
+      } catch (e) {
+        console.log(e);
       }
     },
     [dirtyFields]
