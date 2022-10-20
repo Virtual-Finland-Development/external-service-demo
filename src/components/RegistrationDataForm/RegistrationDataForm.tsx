@@ -60,12 +60,17 @@ export default function RegistrationDataForm(props: Props) {
   );
 
   return (
-    <Box bg={'tomato'} w={'100%'} color={'white'}>
-      <Container marginBottom={4} p={4} bg={'whiteAlpha.300'}>
-        <Heading>Register foreigner</Heading>
+    <Box>
+      <Container
+        marginBottom={4}
+        p={4}
+        bg={'whiteAlpha.300'}
+        color={'blue.700'}
+      >
+        <Heading color={'blue.900'}>Register foreigner</Heading>
         <p>Input information about your registration</p>
       </Container>
-      <Container p={4} bg={'whiteAlpha.300'}>
+      <Container p={4} bg={'blue.700'} color={'white'} borderRadius={8}>
         <form onSubmit={handleSubmit(doSubmit)}>
           <Flex direction={'column'} gap={5}>
             <Flex>
