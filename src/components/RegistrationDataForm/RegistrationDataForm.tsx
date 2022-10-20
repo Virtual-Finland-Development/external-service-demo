@@ -260,7 +260,7 @@ export default function RegistrationDataForm(props: Props) {
                     >
                       Other particular reason (please give details):
                     </Radio>
-                    <Input />
+                    <Input {...register('ReasonForRecordingInformationDescription')} />
                   </Stack>
                 </RadioGroup>
               </FormControl>

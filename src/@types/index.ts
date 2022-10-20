@@ -40,6 +40,7 @@ export interface ProfileFormData {
   DateOfArrivalInFinland: string;
   EndDateOfStayInFinland: string;
   ReasonForRecordingInformation: InformationRegistrationReason;
+  ReasonForRecordingInformationDescription: string;
 }
 
 export interface ProfileData {
