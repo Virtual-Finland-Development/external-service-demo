@@ -30,6 +30,7 @@ export interface ProfileFormData {
   DateOfBirth: string;
   Sex: Sex;
   RegistrationIdentityType: RegistrationIdentityType;
+  RegistrationIdentity: string;
   CountryOfOrigin: string;
   DistrictOfOrigin: string;
   NativeLanguage: string;
