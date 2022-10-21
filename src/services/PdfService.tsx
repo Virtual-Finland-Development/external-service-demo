@@ -49,8 +49,7 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
     ),
     reasonForRecordingInformationDescription = form.getTextField(
       'Työskentely Suomessa  Arbete i Finland Ammatinharjoittaminen Suomessa Yrkesutövning i Finland Muu erityinen syy selvitä  Annan särskild orsak förklara'
-    ),
-    dateOfApplication = form.getTextField('Päiväys  Datum');
+    );
 
   familyName.setText(data.FamilyName);
   previousFamilyNames.setText(data.PreviousFamilyNames);
