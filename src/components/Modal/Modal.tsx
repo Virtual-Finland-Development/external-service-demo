@@ -24,10 +24,10 @@ export default function Modal(props: ModalProps) {
   return (
     <ChakraModal isOpen={isOpen} onClose={onClose} isCentered size="4xl">
       <ModalOverlay />
-      <ModalContent mx={{ base: 2, md: 0 }}>
+      <ModalContent mx={{ base: 2, md: 0 }} maxH="100%" overflowY="auto">
         <ModalHeader>{title || ''}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody pb={10}>{content || ''}</ModalBody>
+        <ModalBody p={0}>{content || ''}</ModalBody>
         <ModalFooter>
           <Button colorScheme={'blue'} leftIcon={<EmailIcon />}></Button>
         </ModalFooter>
