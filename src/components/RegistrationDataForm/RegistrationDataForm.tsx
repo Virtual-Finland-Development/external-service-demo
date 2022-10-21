@@ -4,6 +4,7 @@ import {
   Container,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -22,6 +23,8 @@ import {
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { ViewIcon } from '@chakra-ui/icons';
+import { useModal } from '../../context/ModalContext/ModalContext';
+import PdfForm from '../PdfForm/PdfForm';
 
 interface Props {
   profileApiData: ProfileData | undefined;
@@ -52,12 +55,21 @@ export default function RegistrationDataForm(props: Props) {
         const dirtyKeys = Object.keys(dirtyFields);
         payload = { ...values };
         console.log(payload);
+        const data = payload as ProfileFormData;
+        console.log('payload as data is: ');
+        console.log(data);
+        openModal({
+          title: 'Form Preview',
+          content: <PdfForm profileData={payload as ProfileFormData}></PdfForm>,
+        });
       } catch (e) {
         console.log(e);
       }
     },
     [dirtyFields]
   );
+
+  const { openModal, closeModal } = useModal();
 
   return (
     <Box>
@@ -112,7 +124,13 @@ export default function RegistrationDataForm(props: Props) {
               <Flex direction={'column'}>
                 <FormControl id="dateOfBirth">
                   <FormLabel>Date of birth</FormLabel>
-                  <Input {...register('DateOfBirth')} />
+                  <Input
+                    {...register('DateOfBirth')}
+                    placeholder={'E.g. 1.1.2023'}
+                  />
+                  <FormHelperText color={'white'}>
+                    Input date in d.m.yyyyy format
+                  </FormHelperText>
                 </FormControl>
               </Flex>
               <Flex direction={'column'}>
@@ -153,7 +171,7 @@ export default function RegistrationDataForm(props: Props) {
                         </Radio>
                       </Stack>
                     </RadioGroup>
-                    <Input />
+                    <Input {...register('RegistrationIdentity')} />
                   </Stack>
                 </FormControl>
               </Flex>
@@ -214,7 +232,10 @@ export default function RegistrationDataForm(props: Props) {
               <Flex direction={'column'}>
                 <FormControl id="dateOfArrivalInFinland">
                   <FormLabel>Date of arrival in Finland</FormLabel>
-                  <Input {...register('DateOfArrivalInFinland')}></Input>
+                  <Input
+                    {...register('DateOfArrivalInFinland')}
+                    placeholder={'E.g. 1.1.2023'}
+                  ></Input>
                 </FormControl>
               </Flex>
               <Spacer />
@@ -224,7 +245,10 @@ export default function RegistrationDataForm(props: Props) {
                     What is the latest estimated end date of your stay in
                     Finland?
                   </FormLabel>
-                  <Input {...register('EndDateOfStayInFinland')} />
+                  <Input
+                    {...register('EndDateOfStayInFinland')}
+                    placeholder={'E.g. 1.1.2023'}
+                  />
                 </FormControl>
               </Flex>
             </Flex>
@@ -260,7 +284,9 @@ export default function RegistrationDataForm(props: Props) {
                     >
                       Other particular reason (please give details):
                     </Radio>
-                    <Input {...register('ReasonForRecordingInformationDescription')} />
+                    <Input
+                      {...register('ReasonForRecordingInformationDescription')}
+                    />
                   </Stack>
                 </RadioGroup>
               </FormControl>

@@ -10,34 +10,37 @@ import LoginRoutes from '../LoginRoutes/LoginRoutes';
 import Loading from '../Loading/Loading';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import AuthenticatedContainer from '../AuthenticatedContainer/AuthenticatedContainer';
+import { ModalProvider } from '../../context/ModalContext/ModalContext';
 
 export default function AppRoot() {
   return (
     <AppProvider>
-      <AppConsumer>
-        {provider => {
-          if (typeof provider === 'undefined') {
-            return null;
-          }
+      <ModalProvider>
+        <AppConsumer>
+          {provider => {
+            if (typeof provider === 'undefined') {
+              return null;
+            }
 
-          const { authenticated, loading, error } = provider;
+            const { authenticated, loading, error } = provider;
 
-          if (loading || error) {
-            return (
-              <Flex h="100vh" alignItems="center" justifyContent="center">
-                {loading && <Loading />}
-                {error && (
-                  <Stack w="full" maxW="md">
-                    <ErrorMessage error={error} />
-                  </Stack>
-                )}
-              </Flex>
-            );
-          }
+            if (loading || error) {
+              return (
+                <Flex h="100vh" alignItems="center" justifyContent="center">
+                  {loading && <Loading />}
+                  {error && (
+                    <Stack w="full" maxW="md">
+                      <ErrorMessage error={error} />
+                    </Stack>
+                  )}
+                </Flex>
+              );
+            }
 
-          return !authenticated ? <LoginRoutes /> : <AuthenticatedContainer />;
-        }}
-      </AppConsumer>
+            return !authenticated ? <LoginRoutes /> : <AuthenticatedContainer />;
+          }}
+        </AppConsumer>
+      </ModalProvider>
     </AppProvider>
   );
 }
