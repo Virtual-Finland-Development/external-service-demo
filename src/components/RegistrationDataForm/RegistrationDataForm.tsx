@@ -54,10 +54,7 @@ export default function RegistrationDataForm(props: Props) {
         let payload: Partial<ProfileFormData>;
         const dirtyKeys = Object.keys(dirtyFields);
         payload = { ...values };
-        console.log(payload);
         const data = payload as ProfileFormData;
-        console.log('payload as data is: ');
-        console.log(data);
         openModal({
           title: 'Form Preview',
           content: <PdfForm profileData={payload as ProfileFormData}></PdfForm>,
