@@ -133,7 +133,7 @@ export default function RegistrationDataForm(props: Props) {
               <Flex direction={'column'}>
                 <FormControl id="sex">
                   <FormLabel>Sex</FormLabel>
-                  <RadioGroup>
+                  <RadioGroup defaultValue={Sex.Male}>
                     <Stack direction={'column'}>
                       <Radio {...register('Sex')} value={Sex.Male}>
                         Male
@@ -152,7 +152,11 @@ export default function RegistrationDataForm(props: Props) {
                     residence
                   </FormLabel>
                   <Stack direction={'column'}>
-                    <RadioGroup>
+                    <RadioGroup
+                      defaultValue={
+                        RegistrationIdentityType.PersonalIdentityCode
+                      }
+                    >
                       <Stack direction={'row'}>
                         <Radio
                           {...register('RegistrationIdentityType')}
@@ -259,7 +263,9 @@ export default function RegistrationDataForm(props: Props) {
                     the related additional information.)
                   </Heading>
                 </FormLabel>
-                <RadioGroup>
+                <RadioGroup
+                  defaultValue={InformationRegistrationReason.WorkingInFinland}
+                >
                   <Stack direction={'column'}>
                     <Radio
                       {...register('ReasonForRecordingInformation')}
