@@ -1,61 +1,54 @@
-import React, { useState } from "react";
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Container,
-  Heading,
-  Stack,
-} from "@chakra-ui/react";
-import { Document, Page, pdfjs } from "react-pdf";
-import { ProfileData } from "../../models/ProfileData";
-import { createPdfFrom } from "../../services/PdfService";
+import { useEffect, useState, useCallback } from 'react';
+import { Flex, useBreakpointValue } from '@chakra-ui/react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import { SizeMe } from 'react-sizeme';
+import { createPdfFrom } from '../../services/PdfService';
+import { ProfileFormData } from '../../@types';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-export default function PdfForm() {
+interface Props {
+  profileData: ProfileFormData | undefined;
+}
+
+export default function PdfForm(props: Props) {
   const [file, setFile] = useState<Blob>();
 
-  async function loadDataFromApiAndFillPdf() {
-    const profileData: ProfileData = {
-      Firstname: "Aku",
-      Lastname: "Ankka",
-    };
+  const pdfScale = useBreakpointValue(
+    {
+      base: 1.1,
+      md: 0.8,
+    },
+    {
+      fallback: 'base',
+    }
+  );
 
-    const bytes = await fetch("./form.pdf").then((res) => res.arrayBuffer());
-
-    await createPdfFrom(bytes, profileData).then((result) => {
+  const loadDataFromApiAndFillPdf = useCallback(async () => {
+    const bytes = await fetch('./form.pdf').then(res => res.arrayBuffer());
+    const data = props.profileData as ProfileFormData;
+    await createPdfFrom(bytes, data).then(result => {
       setFile(new Blob([result]));
     });
-  }
+  }, [props.profileData]);
+
+  useEffect(() => {
+    loadDataFromApiAndFillPdf();
+  }, [loadDataFromApiAndFillPdf]);
 
   return (
-    <Box data-testid="PdfForm">
-      <Container>
-        <Heading as="h1" size="md">
-          <Container>
-            Registration information on a foreigner staying in Finland
-            temporarily
-          </Container>
-        </Heading>
-        <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
-          <AspectRatio ratio={1 / 1.4142}>
-            <Document file={file ?? "./form.pdf"}>
-              <Page key={1} pageNumber={1} />
-            </Document>
-          </AspectRatio>
-        </Box>
-
-        <Stack direction="column">
-          <Button
-            colorScheme="blue"
-            size="md"
-            onClick={loadDataFromApiAndFillPdf}
-          >
-            Load data from Profile API
-          </Button>
-        </Stack>
-      </Container>
-    </Box>
+    <SizeMe>
+      {({ size }) => (
+        <Flex alignItems="center" justifyContent="center">
+          <Document file={file ?? './form.pdf'}>
+            <Page
+              pageNumber={1}
+              width={size.width ? size.width : 1}
+              scale={pdfScale}
+            />
+          </Document>
+        </Flex>
+      )}
+    </SizeMe>
   );
 }
