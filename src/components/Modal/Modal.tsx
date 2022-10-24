@@ -1,6 +1,5 @@
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import {
-  Button,
   Modal as ChakraModal,
   ModalBody,
   ModalCloseButton,
@@ -9,17 +8,17 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react';
-import { EmailIcon } from '@chakra-ui/icons';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   content?: string | ReactElement;
+  footerContent?: string | ReactElement;
 }
 
 export default function Modal(props: ModalProps) {
-  const { isOpen, onClose, title, content } = props;
+  const { isOpen, onClose, title, content, footerContent } = props;
 
   return (
     <ChakraModal isOpen={isOpen} onClose={onClose} isCentered size="4xl">
@@ -28,9 +27,7 @@ export default function Modal(props: ModalProps) {
         <ModalHeader>{title || ''}</ModalHeader>
         <ModalCloseButton />
         <ModalBody p={0}>{content || ''}</ModalBody>
-        <ModalFooter>
-          <Button colorScheme={'blue'} leftIcon={<EmailIcon />}></Button>
-        </ModalFooter>
+        {footerContent && <ModalFooter>{footerContent}</ModalFooter>}
       </ModalContent>
     </ChakraModal>
   );

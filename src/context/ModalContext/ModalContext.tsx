@@ -1,9 +1,9 @@
 import {
   createContext,
+  ReactElement,
+  useCallback,
   useContext,
   useState,
-  useCallback,
-  ReactElement,
 } from 'react';
 import { useDisclosure } from '@chakra-ui/react';
 
@@ -22,6 +22,7 @@ interface ModalProviderProps {
 interface IModal {
   title: string | null;
   content: string | ReactElement;
+  footerContent: string;
   onClose?: () => void;
 }
 
@@ -70,6 +71,7 @@ function ModalProvider({ children }: ModalProviderProps) {
           onClose={closeModal}
           title={modal?.title || ''}
           content={modal?.content}
+          footerContent={modal?.footerContent}
         />
       </>
     </ModalContext.Provider>

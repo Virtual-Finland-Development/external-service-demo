@@ -20,9 +20,9 @@ import {
   RegistrationIdentityType,
   Sex,
 } from '../../@types';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { ViewIcon } from '@chakra-ui/icons';
+import { EmailIcon, ViewIcon } from '@chakra-ui/icons';
 import { useModal } from '../../context/ModalContext/ModalContext';
 import PdfForm from '../PdfForm/PdfForm';
 
@@ -58,6 +58,9 @@ export default function RegistrationDataForm(props: Props) {
         openModal({
           title: 'Form Preview',
           content: <PdfForm profileData={payload as ProfileFormData}></PdfForm>,
+          footerContent: (
+            <Button colorScheme={'blue'} leftIcon={<EmailIcon />}></Button>
+          ),
         });
       } catch (e) {
         console.log(e);
