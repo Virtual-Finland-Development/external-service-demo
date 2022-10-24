@@ -22,7 +22,7 @@ interface ModalProviderProps {
 interface IModal {
   title: string | null;
   content: string | ReactElement;
-  footerContent: string;
+  footerContent: string | ReactElement;
   onClose?: () => void;
 }
 
