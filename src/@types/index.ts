@@ -20,6 +20,7 @@ export interface UserProfile {
   created: string;
   modified: string;
   jobsDataConsent: boolean;
+  immigrationDataConsent: boolean;
   countryOfBirthCode: string;
   occupationCode: string;
 }
@@ -42,8 +43,8 @@ export interface ProfileFormData extends UserProfile {
 }
 
 export enum Sex {
-  Male = 'MALE',
-  Female = 'FEMALE',
+  Male = 'male',
+  Female = 'female',
 }
 
 export enum RegistrationIdentityType {
