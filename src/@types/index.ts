@@ -20,33 +20,25 @@ export interface UserProfile {
   created: string;
   modified: string;
   jobsDataConsent: boolean;
+  countryOfBirthCode: string;
+  occupationCode: string;
 }
 
-export interface ProfileFormData {
-  FamilyName: string;
-  PreviousFamilyNames: string;
-  GivenName: string;
-  PreviousGivenNames: string;
-  DateOfBirth: string;
-  Sex: Sex;
-  RegistrationIdentityType: RegistrationIdentityType;
-  RegistrationIdentity: string;
-  CountryOfOrigin: string;
-  DistrictOfOrigin: string;
-  NativeLanguage: string;
-  Occupation: string;
-  Citizenship: string;
-  AddressInFinland: string;
-  AddressAbroad: string;
-  DateOfArrivalInFinland: string;
-  EndDateOfStayInFinland: string;
-  ReasonForRecordingInformation: InformationRegistrationReason;
-  ReasonForRecordingInformationDescription: string;
-}
-
-export interface ProfileData {
-  Firstname: string;
-  Lastname: string;
+export interface ProfileFormData extends UserProfile {
+  previousFamilyNames: string;
+  previousGivenNames: string;
+  dateOfBirth: string;
+  sex: Sex;
+  registrationIdentityType: RegistrationIdentityType;
+  registrationIdentity: string;
+  districtOfOrigin: string;
+  nativeLanguage: string;
+  citizenship: string;
+  addressInFinland: string;
+  dateOfArrivalInFinland: string;
+  endDateOfStayInFinland: string;
+  reasonForRecordingInformation: InformationRegistrationReason;
+  reasonForRecordingInformationDescription: string;
 }
 
 export enum Sex {
