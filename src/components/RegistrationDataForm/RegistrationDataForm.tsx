@@ -9,7 +9,6 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
-  Icon,
   Input,
   Radio,
   RadioGroup,
@@ -26,16 +25,10 @@ import {
 } from '../../@types';
 import React, { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  CheckCircleIcon,
-  CheckIcon,
-  EmailIcon,
-  ViewIcon,
-} from '@chakra-ui/icons';
+import { CheckCircleIcon, EmailIcon, ViewIcon } from '@chakra-ui/icons';
 import { useModal } from '../../context/ModalContext/ModalContext';
 import PdfForm from '../PdfForm/PdfForm';
 import { sendPdf } from '../../services/PdfService';
-import { Link } from '@chakra-ui/react';
 
 interface Props {
   profileApiData: ProfileData | undefined;
@@ -64,8 +57,7 @@ export default function RegistrationDataForm(props: Props) {
   const toast = useToast();
 
   const trySendPdf = () => {
-    sendPdf().then(res => {
-      console.log('PDF sent successfully');
+    sendPdf().then(() => {
       closeModal();
       toast({
         title: 'Registration form was sent successfully',
@@ -82,9 +74,7 @@ export default function RegistrationDataForm(props: Props) {
     async (values: any) => {
       try {
         let payload: Partial<ProfileFormData>;
-        const dirtyKeys = Object.keys(dirtyFields);
         payload = { ...values };
-        const data = payload as ProfileFormData;
         openModal({
           title: 'Form Preview',
           content: <PdfForm profileData={payload as ProfileFormData}></PdfForm>,
@@ -104,16 +94,6 @@ export default function RegistrationDataForm(props: Props) {
   );
 
   const { openModal, closeModal } = useModal();
-
-  const resetForm = () => {
-    setIsPdfSent(false);
-  };
-
-  const downloadPdf = () => {
-    return fetch('./form.pdf').then((res: Response) => {
-      return res;
-    });
-  };
 
   return (
     <Box>

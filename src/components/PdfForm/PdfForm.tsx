@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Flex, useBreakpointValue } from '@chakra-ui/react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { SizeMe } from 'react-sizeme';
