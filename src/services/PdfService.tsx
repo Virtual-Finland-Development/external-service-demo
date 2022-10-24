@@ -6,6 +6,11 @@ import {
   Sex,
 } from '../@types';
 
+export async function sendPdf() {
+  console.log('Trying to send PDF');
+  localStorage.setItem('pdfSendState', 'true');
+}
+
 export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   const pdfDoc = await PDFDocument.load(bytes),
     form = pdfDoc.getForm(),

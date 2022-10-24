@@ -12,6 +12,7 @@ import {
   RadioGroup,
   Spacer,
   Stack,
+  useToast,
 } from '@chakra-ui/react';
 import {
   InformationRegistrationReason,
@@ -25,6 +26,7 @@ import { useForm } from 'react-hook-form';
 import { EmailIcon, ViewIcon } from '@chakra-ui/icons';
 import { useModal } from '../../context/ModalContext/ModalContext';
 import PdfForm from '../PdfForm/PdfForm';
+import { sendPdf } from '../../services/PdfService';
 
 interface Props {
   profileApiData: ProfileData | undefined;
@@ -48,6 +50,22 @@ export default function RegistrationDataForm(props: Props) {
     },
   });
 
+  const toast = useToast();
+
+  const trySendPdf = () => {
+    sendPdf().then(res => {
+      console.log('PDF sent successfully');
+      closeModal();
+      toast({
+        title: 'Registration form was sent successfully',
+        status: 'success',
+        position: 'top-right',
+        duration: 5000,
+        isClosable: true,
+      });
+    });
+  };
+
   const doSubmit = useCallback(
     async (values: any) => {
       try {
@@ -59,7 +77,11 @@ export default function RegistrationDataForm(props: Props) {
           title: 'Form Preview',
           content: <PdfForm profileData={payload as ProfileFormData}></PdfForm>,
           footerContent: (
-            <Button colorScheme={'blue'} leftIcon={<EmailIcon />}></Button>
+            <Button
+              colorScheme={'blue'}
+              leftIcon={<EmailIcon />}
+              onClick={trySendPdf}
+            ></Button>
           ),
         });
       } catch (e) {
