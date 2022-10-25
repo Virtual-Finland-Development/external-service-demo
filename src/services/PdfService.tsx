@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
+import { format, parseISO } from 'date-fns';
 import {
   InformationRegistrationReason,
   ProfileFormData,
@@ -57,7 +58,9 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   givenName.setText(data.firstName);
   previousGivenNames.setText(data.previousGivenNames);
 
-  dateOfBirth.setText(data.dateOfBirth);
+  dateOfBirth.setText(
+    data.dateOfBirth ? format(parseISO(data.dateOfBirth), 'dd.MM.yyyy') : ''
+  );
 
   // Female cannot be set, because there is no checkbox field for it ":D"
   if (data.sex === Sex.Male) {
@@ -82,7 +85,7 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
 
   nativeLanguage.setText(data.nativeLanguage);
   occupation.setText(data.occupationCode);
-  citizenship.setText(data.citizenship);
+  citizenship.setText(data.nationalityCode);
 
   addressInFinland.setText(data.addressInFinland);
   addressAbroad.setText(data.address);

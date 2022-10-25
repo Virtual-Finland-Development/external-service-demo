@@ -20,9 +20,13 @@ export interface UserProfile {
   created: string;
   modified: string;
   jobsDataConsent: boolean;
-  immigrationDataConsent: boolean;
   countryOfBirthCode: string;
   occupationCode: string;
+  nationalityCode: string;
+  nativeLanguageCode: string;
+  gender: string;
+  dateOfBirth: string;
+  immigrationDataConsent: boolean;
 }
 
 export interface ProfileFormData extends UserProfile {
@@ -56,4 +60,25 @@ export enum InformationRegistrationReason {
   WorkingInFinland = 'WORKING_IN_FINLAND',
   OperationOfTradeProfessionInFinland = 'OPERATION_OF_TRADE_PROFESSION_IN_FINLAND',
   Other = 'OTHER',
+}
+
+export interface CountryOption {
+  displayName: string;
+  englishName: string;
+  id: string;
+  nativeName: string;
+  threeLetterISORegionName: string;
+  twoLetterISORegionName: string;
+}
+
+export interface OccupationOption {
+  id: string;
+  name: {
+    en: string;
+  };
+}
+
+export interface LanguageOption {
+  id: string;
+  englishName: string;
 }

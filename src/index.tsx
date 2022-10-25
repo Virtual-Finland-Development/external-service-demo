@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import './index.css';
 
 // components
 import AppRoot from './components/AppRoot/AppRoot';
+
+// Create react-query client
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,9 +19,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.Fragment>
     <BrowserRouter>
-      <ChakraProvider>
-        <AppRoot />
-      </ChakraProvider>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider>
+          <AppRoot />
+        </ChakraProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   </React.Fragment>
 );

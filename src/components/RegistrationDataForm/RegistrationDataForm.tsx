@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { format, parseISO } from 'date-fns';
 import {
   Box,
   Button,
@@ -24,6 +25,9 @@ import {
   InformationRegistrationReason,
   RegistrationIdentityType,
   Sex,
+  CountryOption,
+  OccupationOption,
+  LanguageOption,
 } from '../../@types';
 
 // context
@@ -31,6 +35,21 @@ import { useModal } from '../../context/ModalContext/ModalContext';
 
 // components
 import PdfForm from '../PdfForm/PdfForm';
+
+function getCountryValue(list: CountryOption[], itemId: string) {
+  if (!list) return undefined;
+  return list.find(i => i.id === itemId)?.englishName || undefined;
+}
+
+function getOccupationValue(list: OccupationOption[], itemId: string) {
+  if (!list) return undefined;
+  return list.find(i => i.id === itemId)?.name.en || undefined;
+}
+
+function getLanguageValue(list: LanguageOption[], itemId: string) {
+  if (!list) return undefined;
+  return list.find(i => i.id === itemId)?.englishName || undefined;
+}
 
 const Divider = () => (
   <Center h="24px">
@@ -41,11 +60,16 @@ const Divider = () => (
 interface Props {
   profileApiData: Partial<ProfileFormData> | undefined;
   saveUserConsent: () => void;
+  lists: {
+    countries: CountryOption[];
+    occupations: OccupationOption[];
+    languages: LanguageOption[];
+  };
   isLoading: boolean;
 }
 
 export default function RegistrationDataForm(props: Props) {
-  const { profileApiData, saveUserConsent, isLoading } = props;
+  const { profileApiData, saveUserConsent, lists, isLoading } = props;
   const { openModal, closeModal } = useModal();
 
   const { handleSubmit, register, reset } = useForm<ProfileFormData>({
@@ -63,9 +87,26 @@ export default function RegistrationDataForm(props: Props) {
    */
   useEffect(() => {
     if (profileApiData?.immigrationDataConsent) {
-      reset({ ...profileApiData });
+      reset({
+        ...profileApiData,
+        dateOfBirth: profileApiData.dateOfBirth
+          ? format(parseISO(profileApiData.dateOfBirth), 'yyyy-MM-dd')
+          : undefined,
+        countryOfBirthCode: profileApiData.countryOfBirthCode
+          ? getCountryValue(lists.countries, profileApiData.countryOfBirthCode)
+          : undefined,
+        nationalityCode: profileApiData.nationalityCode
+          ? getCountryValue(lists.countries, profileApiData.nationalityCode)
+          : undefined,
+        occupationCode: profileApiData.occupationCode
+          ? getOccupationValue(lists.occupations, profileApiData.occupationCode)
+          : undefined,
+        nativeLanguageCode: profileApiData.nativeLanguageCode
+          ? getLanguageValue(lists.languages, profileApiData.nativeLanguageCode)
+          : undefined,
+      });
     }
-  }, [profileApiData, reset]);
+  }, [lists, profileApiData, reset]);
 
   /**
    * Handle form submit, open PDF preview.
@@ -96,18 +137,22 @@ export default function RegistrationDataForm(props: Props) {
    */
   const handleConsent = useCallback(() => {
     openModal({
-      title: 'Use your profile data',
+      title: 'Pre-fill form with your profile',
       content: (
-        <Stack>
-          <Text>You need to give your consent for this to work, okay?</Text>
+        <Stack spacing={6}>
+          <Text>
+            We need your consent to access your profile data in Access to
+            Finland service.
+          </Text>
           <Button
+            mt={6}
             colorScheme="blue"
             onClick={() => {
               saveUserConsent();
               closeModal();
             }}
           >
-            Okay
+            Approve
           </Button>
         </Stack>
       ),
@@ -134,7 +179,7 @@ export default function RegistrationDataForm(props: Props) {
           }
           onClick={handleConsent}
           isLoading={isLoading}
-          disabled={profileApiData?.immigrationDataConsent}
+          disabled={isLoading || profileApiData?.immigrationDataConsent}
           {...(profileApiData?.immigrationDataConsent && {
             leftIcon: <CheckIcon />,
           })}
@@ -158,14 +203,11 @@ export default function RegistrationDataForm(props: Props) {
               <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
                 <FormControl id="lastName">
                   <FormLabel>Family name</FormLabel>
-                  <Input {...register('lastName')} disabled={isLoading} />
+                  <Input {...register('lastName')} />
                 </FormControl>
                 <FormControl id="previousFamilyNames">
                   <FormLabel>Previous family names</FormLabel>
-                  <Input
-                    {...register('previousFamilyNames')}
-                    disabled={isLoading}
-                  />
+                  <Input {...register('previousFamilyNames')} />
                 </FormControl>
               </Flex>
 
@@ -260,17 +302,17 @@ export default function RegistrationDataForm(props: Props) {
               </Flex>
 
               <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                <FormControl id="nativeLanguage">
+                <FormControl id="nativeLanguageCode">
                   <FormLabel>Native language</FormLabel>
-                  <Input {...register('nativeLanguage')} />
+                  <Input {...register('nativeLanguageCode')} />
                 </FormControl>
                 <FormControl id="occupationCode">
                   <FormLabel>Occupation</FormLabel>
                   <Input {...register('occupationCode')} />
                 </FormControl>
-                <FormControl id="citizenship">
+                <FormControl id="nationalityCode  ">
                   <FormLabel>Citizenship</FormLabel>
-                  <Input {...register('citizenship')} />
+                  <Input {...register('nationalityCode')} />
                 </FormControl>
               </Flex>
 
