@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { format, parseISO } from 'date-fns';
 import {
   Alert,
@@ -82,7 +82,7 @@ export default function RegistrationDataForm(props: Props) {
   const { profileApiData, saveUserConsent, lists, isLoading } = props;
   const { openModal, closeModal } = useModal();
 
-  const { handleSubmit, register, reset } = useForm<ProfileFormData>({
+  const { handleSubmit, register, reset, control } = useForm<ProfileFormData>({
     mode: 'onSubmit',
     defaultValues: {
       registrationIdentityType: RegistrationIdentityType.PersonalIdentityCode,
@@ -270,71 +270,75 @@ export default function RegistrationDataForm(props: Props) {
 
                   <Divider />
 
-                  <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                    <Flex
-                      direction={{ base: 'column', md: 'row' }}
-                      w={{ base: 'full', md: '50%' }}
-                      gap={4}
-                    >
-                      <FormControl id="dateOfBirth">
-                        <FormLabel>Date of birth</FormLabel>
-                        <Input
-                          {...register('dateOfBirth')}
-                          placeholder={'E.g. 1.1.2023'}
-                          type="date"
-                        />
-                        <FormHelperText>
-                          Input date in d.m.yyyyy format
-                        </FormHelperText>
-                      </FormControl>
-                      <FormControl id="sex">
-                        <FormLabel>Sex</FormLabel>
-                        <RadioGroup defaultValue={Sex.Male}>
-                          <Stack direction={'column'}>
-                            <Radio {...register('sex')} value={Sex.Male}>
-                              Male
-                            </Radio>
-                            <Radio {...register('sex')} value={Sex.Female}>
-                              Female
-                            </Radio>
-                          </Stack>
-                        </RadioGroup>
-                      </FormControl>
-                    </Flex>
-                    <Flex direction="column" gap={2}>
-                      <FormControl id="registrationIdentityType">
-                        <FormLabel>
-                          Personal identity code or Tax id no. in the country of
-                          residence
-                        </FormLabel>
+              <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                <Flex
+                  direction={{ base: 'column', md: 'row' }}
+                  w={{ base: 'full', md: '50%' }}
+                  gap={4}
+                >
+                  <FormControl id="dateOfBirth">
+                    <FormLabel>Date of birth</FormLabel>
+                    <Input
+                      {...register('dateOfBirth')}
+                      placeholder={'E.g. 1.1.2023'}
+                      type="date"
+                    />
+                    <FormHelperText>
+                      Input date in d.m.yyyyy format
+                    </FormHelperText>
+                  </FormControl>
+                  <FormControl id="sex">
+                    <FormLabel>Sex</FormLabel>
+                    <Controller
+                      name="gender"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
                         <RadioGroup
-                          defaultValue={
-                            RegistrationIdentityType.PersonalIdentityCode
-                          }
+                          onChange={onChange}
+                          value={value}
+                          defaultValue={Sex.Male}
                         >
-                          <Stack direction={'row'}>
-                            <Radio
-                              {...register('registrationIdentityType')}
-                              value={
-                                RegistrationIdentityType.PersonalIdentityCode
-                              }
-                            >
-                              Personal identity code
-                            </Radio>
-                            <Radio
-                              {...register('registrationIdentityType')}
-                              value={RegistrationIdentityType.TaxIdentityNumber}
-                            >
-                              Tax identity number
-                            </Radio>
+                          <Stack direction="row">
+                            <Radio value="male">Male</Radio>
+                            <Radio value="female">Female</Radio>
                           </Stack>
                         </RadioGroup>
-                      </FormControl>
-                      <FormControl id="registrationIdentity">
-                        <Input {...register('registrationIdentity')} />
-                      </FormControl>
-                    </Flex>
-                  </Flex>
+                      )}
+                    />
+                  </FormControl>
+                </Flex>
+                <Flex direction="column" gap={2}>
+                  <FormControl id="registrationIdentityType">
+                    <FormLabel>
+                      Personal identity code or Tax id no. in the country of
+                      residence
+                    </FormLabel>
+                    <RadioGroup
+                      defaultValue={
+                        RegistrationIdentityType.PersonalIdentityCode
+                      }
+                    >
+                      <Stack direction={'row'}>
+                        <Radio
+                          {...register('registrationIdentityType')}
+                          value={RegistrationIdentityType.PersonalIdentityCode}
+                        >
+                          Personal identity code
+                        </Radio>
+                        <Radio
+                          {...register('registrationIdentityType')}
+                          value={RegistrationIdentityType.TaxIdentityNumber}
+                        >
+                          Tax identity number
+                        </Radio>
+                      </Stack>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormControl id="registrationIdentity">
+                    <Input {...register('registrationIdentity')} />
+                  </FormControl>
+                </Flex>
+              </Flex>
 
                   <Divider />
 
