@@ -6,6 +6,13 @@ import {
   RegistrationIdentityType,
   Sex,
 } from '../@types';
+import { wait } from '@testing-library/user-event/dist/utils';
+
+export async function sendPdf() {
+  console.log('Trying to send PDF');
+  localStorage.setItem('pdfSendState', 'true');
+  await wait(500); // Artificial delay to simulate waiting for API response
+}
 
 export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   const pdfDoc = await PDFDocument.load(bytes),
