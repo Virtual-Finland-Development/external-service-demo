@@ -1,4 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
+import { format, parseISO } from 'date-fns';
 import {
   InformationRegistrationReason,
   ProfileFormData,
@@ -51,47 +52,49 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
       'Työskentely Suomessa  Arbete i Finland Ammatinharjoittaminen Suomessa Yrkesutövning i Finland Muu erityinen syy selvitä  Annan särskild orsak förklara'
     );
 
-  familyName.setText(data.FamilyName);
-  previousFamilyNames.setText(data.PreviousFamilyNames);
+  familyName.setText(data.lastName);
+  previousFamilyNames.setText(data.previousFamilyNames);
 
-  givenName.setText(data.GivenName);
-  previousGivenNames.setText(data.PreviousGivenNames);
+  givenName.setText(data.firstName);
+  previousGivenNames.setText(data.previousGivenNames);
 
-  dateOfBirth.setText(data.DateOfBirth);
+  dateOfBirth.setText(
+    data.dateOfBirth ? format(parseISO(data.dateOfBirth), 'dd.MM.yyyy') : ''
+  );
 
   // Female cannot be set, because there is no checkbox field for it ":D"
-  if (data.Sex === Sex.Male) {
+  if (data.sex === Sex.Male) {
     sexCheckbox.check();
   }
 
-  if (data.RegistrationIdentityType) {
-    switch (data.RegistrationIdentityType) {
+  if (data.registrationIdentityType) {
+    switch (data.registrationIdentityType) {
       case RegistrationIdentityType.PersonalIdentityCode:
         ssnCheckbox.check();
-        ssn.setText(data.RegistrationIdentity);
+        ssn.setText(data.registrationIdentity);
         break;
       case RegistrationIdentityType.TaxIdentityNumber:
         taxNoCheckbox.check();
-        taxNo.setText(data.RegistrationIdentity);
+        taxNo.setText(data.registrationIdentity);
         break;
     }
   }
 
-  countryOfOrigin.setText(data.CountryOfOrigin);
-  districtOfOrigin.setText(data.DistrictOfOrigin);
+  countryOfOrigin.setText(data.countryOfBirthCode);
+  districtOfOrigin.setText(data.districtOfOrigin);
 
-  nativeLanguage.setText(data.NativeLanguage);
-  occupation.setText(data.Occupation);
-  citizenship.setText(data.Citizenship);
+  nativeLanguage.setText(data.nativeLanguage);
+  occupation.setText(data.occupationCode);
+  citizenship.setText(data.nationalityCode);
 
-  addressInFinland.setText(data.AddressInFinland);
-  addressAbroad.setText(data.AddressAbroad);
+  addressInFinland.setText(data.addressInFinland);
+  addressAbroad.setText(data.address);
 
-  dateOfArrivalInFinland.setText(data.DateOfArrivalInFinland);
-  endDateOfStayInFinland.setText(data.EndDateOfStayInFinland);
+  dateOfArrivalInFinland.setText(data.dateOfArrivalInFinland);
+  endDateOfStayInFinland.setText(data.endDateOfStayInFinland);
 
-  if (data.ReasonForRecordingInformation) {
-    switch (data.ReasonForRecordingInformation) {
+  if (data.reasonForRecordingInformation) {
+    switch (data.reasonForRecordingInformation) {
       case InformationRegistrationReason.WorkingInFinland:
         workingInFinland.check();
         break;
@@ -101,7 +104,7 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
       case InformationRegistrationReason.Other:
         other.check();
         reasonForRecordingInformationDescription.setText(
-          data.ReasonForRecordingInformationDescription
+          data.reasonForRecordingInformationDescription
         );
         break;
     }

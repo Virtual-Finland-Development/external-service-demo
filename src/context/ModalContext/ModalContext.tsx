@@ -10,19 +10,22 @@ import { useDisclosure } from '@chakra-ui/react';
 // components
 import Modal from '../../components/Modal/Modal';
 
+interface IModal {
+  title: string | null;
+  content: string | ReactElement;
+  onClose?: () => void;
+  size?: string;
+  useBodyPadding?: boolean;
+  footerContent?: string | ReactElement;
+}
+
 interface IModalContext {
-  openModal: (modal: any) => void;
+  openModal: (modal: IModal) => void;
   closeModal: () => void;
 }
 
 interface ModalProviderProps {
   children: React.ReactNode;
-}
-
-interface IModal {
-  title: string | null;
-  content: string | ReactElement;
-  onClose?: () => void;
 }
 
 // context
@@ -70,6 +73,11 @@ function ModalProvider({ children }: ModalProviderProps) {
           onClose={closeModal}
           title={modal?.title || ''}
           content={modal?.content}
+          size={modal?.size || undefined}
+          useBodyPadding={
+            modal?.useBodyPadding !== undefined ? modal.useBodyPadding : true
+          }
+          footerContent={modal?.footerContent || undefined}
         />
       </>
     </ModalContext.Provider>
