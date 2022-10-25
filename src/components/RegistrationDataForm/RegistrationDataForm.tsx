@@ -191,9 +191,10 @@ export default function RegistrationDataForm(props: Props) {
       </Flex>
       <Stack
         p={6}
-        bg={'blue.700'}
-        color={'white'}
+        border="1px"
+        borderColor="blue.700"
         rounded="xl"
+        bg="white"
         boxShadow="lg"
         position="relative"
       >
@@ -237,7 +238,7 @@ export default function RegistrationDataForm(props: Props) {
                       placeholder={'E.g. 1.1.2023'}
                       type="date"
                     />
-                    <FormHelperText color="white  ">
+                    <FormHelperText>
                       Input date in d.m.yyyyy format
                     </FormHelperText>
                   </FormControl>
