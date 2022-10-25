@@ -31,7 +31,7 @@ export default function NavBar() {
   const handleLogOutClick = () => {
     setLoading(true);
 
-    const provider = localStorage.getItem(SESSION_STORAGE_AUTH_PROVIDER)!;
+    const provider = sessionStorage.getItem(SESSION_STORAGE_AUTH_PROVIDER)!;
     api.auth.directToAuthGwLogout(provider as AuthProvider);
   };
 

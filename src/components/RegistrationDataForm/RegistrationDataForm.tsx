@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { format, parseISO } from 'date-fns';
 import {
   Box,
@@ -72,7 +72,7 @@ export default function RegistrationDataForm(props: Props) {
   const { profileApiData, saveUserConsent, lists, isLoading } = props;
   const { openModal, closeModal } = useModal();
 
-  const { handleSubmit, register, reset } = useForm<ProfileFormData>({
+  const { handleSubmit, register, reset, control } = useForm<ProfileFormData>({
     mode: 'onSubmit',
     defaultValues: {
       registrationIdentityType: RegistrationIdentityType.PersonalIdentityCode,
@@ -244,16 +244,22 @@ export default function RegistrationDataForm(props: Props) {
                   </FormControl>
                   <FormControl id="sex">
                     <FormLabel>Sex</FormLabel>
-                    <RadioGroup defaultValue={Sex.Male}>
-                      <Stack direction={'column'}>
-                        <Radio {...register('sex')} value={Sex.Male}>
-                          Male
-                        </Radio>
-                        <Radio {...register('sex')} value={Sex.Female}>
-                          Female
-                        </Radio>
-                      </Stack>
-                    </RadioGroup>
+                    <Controller
+                      name="gender"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <RadioGroup
+                          onChange={onChange}
+                          value={value}
+                          defaultValue={Sex.Male}
+                        >
+                          <Stack direction="row">
+                            <Radio value="male">Male</Radio>
+                            <Radio value="female">Female</Radio>
+                          </Stack>
+                        </RadioGroup>
+                      )}
+                    />
                   </FormControl>
                 </Flex>
                 <Flex direction="column" gap={2}>
