@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { format, parseISO } from 'date-fns';
 import {
@@ -6,31 +6,36 @@ import {
   AlertIcon,
   Box,
   Button,
+  Center,
+  Divider as ChakraDivider,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Heading,
-  Text,
   Input,
   Radio,
   RadioGroup,
   Stack,
-  Center,
-  Divider as ChakraDivider,
+  Text,
   useToast,
 } from '@chakra-ui/react';
-import { ViewIcon, EmailIcon, CheckIcon, CheckCircleIcon } from '@chakra-ui/icons';
+import {
+  CheckCircleIcon,
+  CheckIcon,
+  EmailIcon,
+  ViewIcon,
+} from '@chakra-ui/icons';
 
 // types
 import {
-  ProfileFormData,
+  CountryOption,
   InformationRegistrationReason,
+  LanguageOption,
+  OccupationOption,
+  ProfileFormData,
   RegistrationIdentityType,
   Sex,
-  CountryOption,
-  OccupationOption,
-  LanguageOption,
 } from '../../@types';
 
 // context
@@ -83,7 +88,7 @@ export default function RegistrationDataForm(props: Props) {
       registrationIdentityType: RegistrationIdentityType.PersonalIdentityCode,
       sex: Sex.Male,
       reasonForRecordingInformation:
-      InformationRegistrationReason.WorkingInFinland,
+        InformationRegistrationReason.WorkingInFinland,
     },
   });
 
@@ -135,8 +140,6 @@ export default function RegistrationDataForm(props: Props) {
   const doSubmit = useCallback(
     async (values: any) => {
       try {
-        let payload: Partial<ProfileFormData>;
-        payload = { ...values };
         openModal({
           title: 'Form Preview',
           content: <PdfForm profileData={values as ProfileFormData}></PdfForm>,
@@ -145,7 +148,9 @@ export default function RegistrationDataForm(props: Props) {
               colorScheme={'blue'}
               leftIcon={<EmailIcon />}
               onClick={trySendPdf}
-            >Send</Button>
+            >
+              Send
+            </Button>
           ),
           useBodyPadding: false,
           size: '4xl',
@@ -200,258 +205,262 @@ export default function RegistrationDataForm(props: Props) {
         </Box>
       )}
       {!isPdfSent && (
+        <Stack maxW="70ch" spacing={4}>
+          <Flex
+            alignItems="end"
+            justifyContent="space-between"
+            flexWrap="wrap"
+            gap={2}
+          >
+            <Box>
+              <Heading color={'blue.900'}>Register foreigner</Heading>
+              <Text color={'blue.900'}>
+                Input information about your registration
+              </Text>
+            </Box>
+            <Button
+              colorScheme={
+                profileApiData?.immigrationDataConsent ? 'green' : 'blue'
+              }
+              onClick={handleConsent}
+              isLoading={isLoading}
+              disabled={isLoading || profileApiData?.immigrationDataConsent}
+              {...(profileApiData?.immigrationDataConsent && {
+                leftIcon: <CheckIcon />,
+              })}
+            >
+              {profileApiData?.immigrationDataConsent
+                ? 'Profile data used'
+                : 'Pre-fill with your profile'}
+            </Button>
+          </Flex>
+          <Stack
+            p={6}
+            border="1px"
+            borderColor="blue.700"
+            rounded="xl"
+            bg="white"
+            boxShadow="lg"
+            position="relative"
+          >
+            <fieldset disabled={isLoading}>
+              <form onSubmit={handleSubmit(doSubmit)}>
+                <Stack spacing={4}>
+                  <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                    <FormControl id="lastName">
+                      <FormLabel>Family name</FormLabel>
+                      <Input {...register('lastName')} />
+                    </FormControl>
+                    <FormControl id="previousFamilyNames">
+                      <FormLabel>Previous family names</FormLabel>
+                      <Input {...register('previousFamilyNames')} />
+                    </FormControl>
+                  </Flex>
 
+                  <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                    <FormControl id="firstName">
+                      <FormLabel>Given names</FormLabel>
+                      <Input {...register('firstName')} type={'text'} />
+                    </FormControl>
+                    <FormControl id="previousGivenName">
+                      <FormLabel>Previous given names</FormLabel>
+                      <Input {...register('previousGivenNames')} />
+                    </FormControl>
+                  </Flex>
 
-    <Stack maxW="70ch" spacing={4}>
-      <Flex
-        alignItems="end"
-        justifyContent="space-between"
-        flexWrap="wrap"
-        gap={2}
-      >
-        <Box>
-          <Heading color={'blue.900'}>Register foreigner</Heading>
-          <Text color={'blue.900'}>
-            Input information about your registration
-          </Text>
-        </Box>
-        <Button
-          colorScheme={
-            profileApiData?.immigrationDataConsent ? 'green' : 'blue'
-          }
-          onClick={handleConsent}
-          isLoading={isLoading}
-          disabled={isLoading || profileApiData?.immigrationDataConsent}
-          {...(profileApiData?.immigrationDataConsent && {
-            leftIcon: <CheckIcon />,
-          })}
-        >
-          {profileApiData?.immigrationDataConsent
-            ? 'Profile data used'
-            : 'Pre-fill with your profile'}
-        </Button>
-      </Flex>
-      <Stack
-        p={6}
-        border="1px"
-        borderColor="blue.700"
-        rounded="xl"
-        bg="white"
-        boxShadow="lg"
-        position="relative"
-      >
-        <fieldset disabled={isLoading}>
-          <form onSubmit={handleSubmit(doSubmit)}>
-            <Stack spacing={4}>
-              <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                <FormControl id="lastName">
-                  <FormLabel>Family name</FormLabel>
-                  <Input {...register('lastName')} />
-                </FormControl>
-                <FormControl id="previousFamilyNames">
-                  <FormLabel>Previous family names</FormLabel>
-                  <Input {...register('previousFamilyNames')} />
-                </FormControl>
-              </Flex>
+                  <Divider />
 
-              <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                <FormControl id="firstName">
-                  <FormLabel>Given names</FormLabel>
-                  <Input {...register('firstName')} type={'text'} />
-                </FormControl>
-                <FormControl id="previousGivenName">
-                  <FormLabel>Previous given names</FormLabel>
-                  <Input {...register('previousGivenNames')} />
-                </FormControl>
-              </Flex>
+                  <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                    <Flex
+                      direction={{ base: 'column', md: 'row' }}
+                      w={{ base: 'full', md: '50%' }}
+                      gap={4}
+                    >
+                      <FormControl id="dateOfBirth">
+                        <FormLabel>Date of birth</FormLabel>
+                        <Input
+                          {...register('dateOfBirth')}
+                          placeholder={'E.g. 1.1.2023'}
+                          type="date"
+                        />
+                        <FormHelperText>
+                          Input date in d.m.yyyyy format
+                        </FormHelperText>
+                      </FormControl>
+                      <FormControl id="sex">
+                        <FormLabel>Sex</FormLabel>
+                        <RadioGroup defaultValue={Sex.Male}>
+                          <Stack direction={'column'}>
+                            <Radio {...register('sex')} value={Sex.Male}>
+                              Male
+                            </Radio>
+                            <Radio {...register('sex')} value={Sex.Female}>
+                              Female
+                            </Radio>
+                          </Stack>
+                        </RadioGroup>
+                      </FormControl>
+                    </Flex>
+                    <Flex direction="column" gap={2}>
+                      <FormControl id="registrationIdentityType">
+                        <FormLabel>
+                          Personal identity code or Tax id no. in the country of
+                          residence
+                        </FormLabel>
+                        <RadioGroup
+                          defaultValue={
+                            RegistrationIdentityType.PersonalIdentityCode
+                          }
+                        >
+                          <Stack direction={'row'}>
+                            <Radio
+                              {...register('registrationIdentityType')}
+                              value={
+                                RegistrationIdentityType.PersonalIdentityCode
+                              }
+                            >
+                              Personal identity code
+                            </Radio>
+                            <Radio
+                              {...register('registrationIdentityType')}
+                              value={RegistrationIdentityType.TaxIdentityNumber}
+                            >
+                              Tax identity number
+                            </Radio>
+                          </Stack>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormControl id="registrationIdentity">
+                        <Input {...register('registrationIdentity')} />
+                      </FormControl>
+                    </Flex>
+                  </Flex>
 
-              <Divider />
+                  <Divider />
 
-              <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                <Flex
-                  direction={{ base: 'column', md: 'row' }}
-                  w={{ base: 'full', md: '50%' }}
-                  gap={4}
-                >
-                  <FormControl id="dateOfBirth">
-                    <FormLabel>Date of birth</FormLabel>
-                    <Input
-                      {...register('dateOfBirth')}
-                      placeholder={'E.g. 1.1.2023'}
-                      type="date"
-                    />
-                    <FormHelperText>
-                      Input date in d.m.yyyyy format
-                    </FormHelperText>
+                  <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                    <FormControl id="countryOfBirthCode">
+                      <FormLabel>Country where you were born</FormLabel>
+                      <Input {...register('countryOfBirthCode')} />
+                    </FormControl>
+                    <FormControl id="districtOfOrigin">
+                      <FormLabel>The district where you were born</FormLabel>
+                      <Input {...register('districtOfOrigin')} />
+                    </FormControl>
+                  </Flex>
+
+                  <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                    <FormControl id="nativeLanguageCode">
+                      <FormLabel>Native language</FormLabel>
+                      <Input {...register('nativeLanguageCode')} />
+                    </FormControl>
+                    <FormControl id="occupationCode">
+                      <FormLabel>Occupation</FormLabel>
+                      <Input {...register('occupationCode')} />
+                    </FormControl>
+                    <FormControl id="nationalityCode  ">
+                      <FormLabel>Citizenship</FormLabel>
+                      <Input {...register('nationalityCode')} />
+                    </FormControl>
+                  </Flex>
+
+                  <Divider />
+
+                  <FormControl id="addressInFinland">
+                    <FormLabel>Address in Finland</FormLabel>
+                    <Input {...register('addressInFinland')} />
                   </FormControl>
-                  <FormControl id="sex">
-                    <FormLabel>Sex</FormLabel>
-                    <RadioGroup defaultValue={Sex.Male}>
-                      <Stack direction={'column'}>
-                        <Radio {...register('sex')} value={Sex.Male}>
-                          Male
-                        </Radio>
-                        <Radio {...register('sex')} value={Sex.Female}>
-                          Female
-                        </Radio>
-                      </Stack>
-                    </RadioGroup>
+
+                  <FormControl id="address">
+                    <FormLabel>Address abroad</FormLabel>
+                    <Input {...register('address')} />
                   </FormControl>
-                </Flex>
-                <Flex direction="column" gap={2}>
-                  <FormControl id="registrationIdentityType">
+
+                  <Divider />
+
+                  <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                    <FormControl id="dateOfArrivalInFinland" w="auto">
+                      <FormLabel>Date of arrival in Finland</FormLabel>
+                      <Input
+                        {...register('dateOfArrivalInFinland')}
+                        placeholder={'E.g. 1.1.2023'}
+                        type="date"
+                      ></Input>
+                    </FormControl>
+                    <FormControl id="endDateOfStayInFinland" w="auto">
+                      <FormLabel>
+                        What is the latest estimated end date of your stay in
+                        Finland?
+                      </FormLabel>
+                      <Input
+                        {...register('endDateOfStayInFinland')}
+                        placeholder={'E.g. 1.1.2023'}
+                        type="date"
+                      />
+                    </FormControl>
+                  </Flex>
+
+                  <Divider />
+
+                  <FormControl id="reasonForRecordingInformation">
                     <FormLabel>
-                      Personal identity code or Tax id no. in the country of
-                      residence
+                      <Heading size={'sm'}>
+                        The reason for recording information in the Population
+                        Information System (Check the correct alternative and
+                        enter the related additional information.)
+                      </Heading>
                     </FormLabel>
                     <RadioGroup
                       defaultValue={
-                        RegistrationIdentityType.PersonalIdentityCode
+                        InformationRegistrationReason.WorkingInFinland
                       }
                     >
-                      <Stack direction={'row'}>
+                      <Stack direction={'column'}>
                         <Radio
-                          {...register('registrationIdentityType')}
-                          value={RegistrationIdentityType.PersonalIdentityCode}
+                          {...register('reasonForRecordingInformation')}
+                          value={InformationRegistrationReason.WorkingInFinland}
                         >
-                          Personal identity code
+                          Working in Finland
                         </Radio>
                         <Radio
-                          {...register('registrationIdentityType')}
-                          value={RegistrationIdentityType.TaxIdentityNumber}
+                          {...register('reasonForRecordingInformation')}
+                          value={
+                            InformationRegistrationReason.OperationOfTradeProfessionInFinland
+                          }
                         >
-                          Tax identity number
+                          Operation of a trade of profession in Finland
                         </Radio>
+                        <Radio
+                          {...register('reasonForRecordingInformation')}
+                          value={InformationRegistrationReason.Other}
+                        >
+                          Other particular reason (please give details):
+                        </Radio>
+                        <Input
+                          {...register(
+                            'reasonForRecordingInformationDescription'
+                          )}
+                        />
                       </Stack>
                     </RadioGroup>
                   </FormControl>
-                  <FormControl id="registrationIdentity">
-                    <Input {...register('registrationIdentity')} />
-                  </FormControl>
-                </Flex>
-              </Flex>
-
-              <Divider />
-
-              <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                <FormControl id="countryOfBirthCode">
-                  <FormLabel>Country where you were born</FormLabel>
-                  <Input {...register('countryOfBirthCode')} />
-                </FormControl>
-                <FormControl id="districtOfOrigin">
-                  <FormLabel>The district where you were born</FormLabel>
-                  <Input {...register('districtOfOrigin')} />
-                </FormControl>
-              </Flex>
-
-              <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                <FormControl id="nativeLanguageCode">
-                  <FormLabel>Native language</FormLabel>
-                  <Input {...register('nativeLanguageCode')} />
-                </FormControl>
-                <FormControl id="occupationCode">
-                  <FormLabel>Occupation</FormLabel>
-                  <Input {...register('occupationCode')} />
-                </FormControl>
-                <FormControl id="nationalityCode  ">
-                  <FormLabel>Citizenship</FormLabel>
-                  <Input {...register('nationalityCode')} />
-                </FormControl>
-              </Flex>
-
-              <Divider />
-
-              <FormControl id="addressInFinland">
-                <FormLabel>Address in Finland</FormLabel>
-                <Input {...register('addressInFinland')} />
-              </FormControl>
-
-              <FormControl id="address">
-                <FormLabel>Address abroad</FormLabel>
-                <Input {...register('address')} />
-              </FormControl>
-
-              <Divider />
-
-              <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                <FormControl id="dateOfArrivalInFinland" w="auto">
-                  <FormLabel>Date of arrival in Finland</FormLabel>
-                  <Input
-                    {...register('dateOfArrivalInFinland')}
-                    placeholder={'E.g. 1.1.2023'}
-                    type="date"
-                  ></Input>
-                </FormControl>
-                <FormControl id="endDateOfStayInFinland" w="auto">
-                  <FormLabel>
-                    What is the latest estimated end date of your stay in
-                    Finland?
-                  </FormLabel>
-                  <Input
-                    {...register('endDateOfStayInFinland')}
-                    placeholder={'E.g. 1.1.2023'}
-                    type="date"
-                  />
-                </FormControl>
-              </Flex>
-
-              <Divider />
-
-              <FormControl id="reasonForRecordingInformation">
-                <FormLabel>
-                  <Heading size={'sm'}>
-                    The reason for recording information in the Population
-                    Information System (Check the correct alternative and enter
-                    the related additional information.)
-                  </Heading>
-                </FormLabel>
-                <RadioGroup
-                  defaultValue={InformationRegistrationReason.WorkingInFinland}
-                >
-                  <Stack direction={'column'}>
-                    <Radio
-                      {...register('reasonForRecordingInformation')}
-                      value={InformationRegistrationReason.WorkingInFinland}
-                    >
-                      Working in Finland
-                    </Radio>
-                    <Radio
-                      {...register('reasonForRecordingInformation')}
-                      value={
-                        InformationRegistrationReason.OperationOfTradeProfessionInFinland
-                      }
-                    >
-                      Operation of a trade of profession in Finland
-                    </Radio>
-                    <Radio
-                      {...register('reasonForRecordingInformation')}
-                      value={InformationRegistrationReason.Other}
-                    >
-                      Other particular reason (please give details):
-                    </Radio>
-                    <Input
-                      {...register('reasonForRecordingInformationDescription')}
-                    />
-                  </Stack>
-                </RadioGroup>
-              </FormControl>
-            </Stack>
-            <Stack>
-              <Button
-                colorScheme={'blue'}
-                type={'submit'}
-                leftIcon={<ViewIcon />}
-                mt={8}
-                w={{ base: 'full', md: 'auto' }}
-                alignSelf="center"
-              >
-                Preview
-              </Button>
-            </Stack>
-          </form>
-        </fieldset>
-      </Stack>
-    </Stack>
+                </Stack>
+                <Stack>
+                  <Button
+                    colorScheme={'blue'}
+                    type={'submit'}
+                    leftIcon={<ViewIcon />}
+                    mt={8}
+                    w={{ base: 'full', md: 'auto' }}
+                    alignSelf="center"
+                  >
+                    Preview
+                  </Button>
+                </Stack>
+              </form>
+            </fieldset>
+          </Stack>
+        </Stack>
       )}
     </Box>
   );
