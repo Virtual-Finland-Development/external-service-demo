@@ -10,7 +10,7 @@ describe('<PdfForm />', () => {
     render(
       <PdfForm
         profileData={data}
-        disableModalClose={jest.fn()}
+        disableModalClose={jest.fn}
         sendCallback={jest.fn()}
       />
     );
