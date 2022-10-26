@@ -5,6 +5,16 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { AppProvider } from '../context/AppContext/AppContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+// https://stackoverflow.com/questions/64813447/cannot-read-property-addlistener-of-undefined-react-testing-library
+global.matchMedia =
+  global.matchMedia ||
+  function () {
+    return {
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+    };
+  };
+
 const queryClient = new QueryClient();
 
 /**

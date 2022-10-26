@@ -18,21 +18,6 @@ const mockUser = {
  * msw handlers to override HTTP request for testing
  */
 export const handlers = [
-  rest.get('http://localhost/form.pdf', (req, res, ctx) => {
-    /*     // Read the image from the file system using the "fs" module.
-    const imageBuffer = fs.readFileSync(
-      path.resolve(__dirname, '../../../public/form.pdf')
-    );
-
-    console.log(imageBuffer);
-
-    return res(
-      ctx.set('Content-Length', imageBuffer.byteLength.toString()),
-      ctx.set('Content-Type', 'application/pdf'),
-      ctx.body(imageBuffer)
-    ); */
-    return req.passthrough();
-  }),
   rest.post(
     `${AUTH_GW_ENDPOINT}/auth/openid/testbed/auth-token-request`,
     (req, res, ctx) => {

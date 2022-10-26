@@ -7,7 +7,14 @@ import '@testing-library/jest-dom';
 // msw settings
 import { server } from './testing/mocks/server';
 // Establish API mocking before all tests.
-beforeAll(() => server.listen());
+beforeAll(() =>
+  server.listen({
+    onUnhandledRequest(req, print) {
+      if (req.url.pathname.includes('form.pdf')) return;
+      print.warning();
+    },
+  })
+);
 // Reset any request handlers that we may add during the tests,
 // so they don't affect other tests.
 afterEach(() => server.resetHandlers());
