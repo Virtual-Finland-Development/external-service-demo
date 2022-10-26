@@ -17,6 +17,7 @@ interface ModalProps {
   size?: string;
   useBodyPadding?: boolean;
   footerContent?: string | ReactElement;
+  closeDisabled: boolean;
 }
 
 export default function Modal(props: ModalProps) {
@@ -28,6 +29,7 @@ export default function Modal(props: ModalProps) {
     size,
     useBodyPadding,
     footerContent,
+    closeDisabled,
   } = props;
 
   return (
@@ -36,11 +38,12 @@ export default function Modal(props: ModalProps) {
       onClose={onClose}
       isCentered
       {...(size && { size })}
+      closeOnOverlayClick={!closeDisabled}
     >
       <ModalOverlay />
       <ModalContent mx={{ base: 2, md: 0 }} maxH="100%">
         <ModalHeader>{title || ''}</ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton disabled={closeDisabled} />
         <ModalBody {...(!useBodyPadding ? { p: 0 } : { pb: 6 })}>
           {content || ''}
         </ModalBody>

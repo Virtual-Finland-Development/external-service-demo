@@ -17,11 +17,13 @@ interface IModal {
   size?: string;
   useBodyPadding?: boolean;
   footerContent?: string | ReactElement;
+  closeDisabled?: boolean;
 }
 
 interface IModalContext {
   openModal: (modal: IModal) => void;
   closeModal: () => void;
+  setModalCloseDisabled: (disabled: boolean) => void;
 }
 
 interface ModalProviderProps {
@@ -60,11 +62,21 @@ function ModalProvider({ children }: ModalProviderProps) {
     }, 500);
   }, [modal, onClose]);
 
+  const setModalCloseDisabled = (disabled: boolean) => {
+    setModal(modal => {
+      if (modal) {
+        return { ...modal, closeDisabled: disabled };
+      }
+      return null;
+    });
+  };
+
   return (
     <ModalContext.Provider
       value={{
         openModal,
         closeModal,
+        setModalCloseDisabled,
       }}
     >
       <>
@@ -80,6 +92,7 @@ function ModalProvider({ children }: ModalProviderProps) {
             modal?.useBodyPadding !== undefined ? modal.useBodyPadding : true
           }
           footerContent={modal?.footerContent || undefined}
+          closeDisabled={modal?.closeDisabled || false}
         />
       </>
     </ModalContext.Provider>

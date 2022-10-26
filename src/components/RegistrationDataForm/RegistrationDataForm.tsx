@@ -74,7 +74,7 @@ interface Props {
 export default function RegistrationDataForm(props: Props) {
   const [isPdfSent, setIsPdfSent] = useState<boolean>(false);
   const { profileApiData, saveUserConsent, lists, isLoading } = props;
-  const { openModal, closeModal } = useModal();
+  const { openModal, closeModal, setModalCloseDisabled } = useModal();
 
   const { handleSubmit, register, reset, control } = useForm<ProfileFormData>({
     mode: 'onSubmit',
@@ -125,6 +125,7 @@ export default function RegistrationDataForm(props: Props) {
           content: (
             <PdfForm
               profileData={values as ProfileFormData}
+              disableModalClose={() => setModalCloseDisabled(true)}
               sendCallback={() => {
                 closeModal();
                 setIsPdfSent(true);

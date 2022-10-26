@@ -12,11 +12,12 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 interface Props {
   profileData: ProfileFormData | undefined;
+  disableModalClose: () => void;
   sendCallback: () => void;
 }
 
 export default function PdfForm(props: Props) {
-  const { profileData, sendCallback } = props;
+  const { profileData, disableModalClose, sendCallback } = props;
 
   const [file, setFile] = useState<Blob>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,6 +41,7 @@ export default function PdfForm(props: Props) {
   }, [profileData]);
 
   const onSendClick = () => {
+    disableModalClose();
     setLoading(true);
 
     setTimeout(() => {
