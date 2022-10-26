@@ -11,7 +11,7 @@ describe('<PdfForm />', () => {
     const { container } = customRender1(
       <PdfForm
         profileData={{} as ProfileFormData}
-        disableModalClose={jest.fn}
+        disableModalClose={jest.fn()}
         sendCallback={jest.fn()}
       />
     );
