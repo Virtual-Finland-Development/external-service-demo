@@ -20,12 +20,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import {
-  CheckCircleIcon,
-  CheckIcon,
-  EmailIcon,
-  ViewIcon,
-} from '@chakra-ui/icons';
+import { CheckCircleIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons';
 
 // types
 import {
@@ -43,7 +38,6 @@ import { useModal } from '../../context/ModalContext/ModalContext';
 
 // components
 import PdfForm from '../PdfForm/PdfForm';
-import { sendPdf } from '../../services/PdfService';
 
 function getCountryValue(list: CountryOption[], itemId: string) {
   if (!list) return undefined;
@@ -120,20 +114,6 @@ export default function RegistrationDataForm(props: Props) {
 
   const toast = useToast();
 
-  const trySendPdf = () => {
-    sendPdf().then(() => {
-      closeModal();
-      toast({
-        title: 'Registration form was sent successfully',
-        status: 'success',
-        position: 'top-right',
-        duration: 5000,
-        isClosable: true,
-      });
-      setIsPdfSent(true);
-    });
-  };
-
   /**
    * Handle form submit, open PDF preview.
    */
@@ -142,15 +122,21 @@ export default function RegistrationDataForm(props: Props) {
       try {
         openModal({
           title: 'Form Preview',
-          content: <PdfForm profileData={values as ProfileFormData}></PdfForm>,
-          footerContent: (
-            <Button
-              colorScheme={'blue'}
-              leftIcon={<EmailIcon />}
-              onClick={trySendPdf}
-            >
-              Send
-            </Button>
+          content: (
+            <PdfForm
+              profileData={values as ProfileFormData}
+              sendCallback={() => {
+                closeModal();
+                setIsPdfSent(true);
+                toast({
+                  title: 'Registration form was sent successfully',
+                  status: 'success',
+                  position: 'top-right',
+                  duration: 5000,
+                  isClosable: true,
+                });
+              }}
+            />
           ),
           useBodyPadding: false,
           size: '4xl',
@@ -159,7 +145,7 @@ export default function RegistrationDataForm(props: Props) {
         console.log(e);
       }
     },
-    [openModal]
+    [closeModal, openModal, toast]
   );
 
   /**
@@ -270,75 +256,77 @@ export default function RegistrationDataForm(props: Props) {
 
                   <Divider />
 
-              <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
-                <Flex
-                  direction={{ base: 'column', md: 'row' }}
-                  w={{ base: 'full', md: '50%' }}
-                  gap={4}
-                >
-                  <FormControl id="dateOfBirth">
-                    <FormLabel>Date of birth</FormLabel>
-                    <Input
-                      {...register('dateOfBirth')}
-                      placeholder={'E.g. 1.1.2023'}
-                      type="date"
-                    />
-                    <FormHelperText>
-                      Input date in d.m.yyyyy format
-                    </FormHelperText>
-                  </FormControl>
-                  <FormControl id="sex">
-                    <FormLabel>Sex</FormLabel>
-                    <Controller
-                      name="gender"
-                      control={control}
-                      render={({ field: { onChange, value } }) => (
+                  <Flex direction={{ base: 'column', md: 'row' }} gap={4}>
+                    <Flex
+                      direction={{ base: 'column', md: 'row' }}
+                      w={{ base: 'full', md: '50%' }}
+                      gap={4}
+                    >
+                      <FormControl id="dateOfBirth">
+                        <FormLabel>Date of birth</FormLabel>
+                        <Input
+                          {...register('dateOfBirth')}
+                          placeholder={'E.g. 1.1.2023'}
+                          type="date"
+                        />
+                        <FormHelperText>
+                          Input date in d.m.yyyyy format
+                        </FormHelperText>
+                      </FormControl>
+                      <FormControl id="sex">
+                        <FormLabel>Sex</FormLabel>
+                        <Controller
+                          name="gender"
+                          control={control}
+                          render={({ field: { onChange, value } }) => (
+                            <RadioGroup
+                              onChange={onChange}
+                              value={value}
+                              defaultValue={Sex.Male}
+                            >
+                              <Stack direction="row">
+                                <Radio value="male">Male</Radio>
+                                <Radio value="female">Female</Radio>
+                              </Stack>
+                            </RadioGroup>
+                          )}
+                        />
+                      </FormControl>
+                    </Flex>
+                    <Flex direction="column" gap={2}>
+                      <FormControl id="registrationIdentityType">
+                        <FormLabel>
+                          Personal identity code or Tax id no. in the country of
+                          residence
+                        </FormLabel>
                         <RadioGroup
-                          onChange={onChange}
-                          value={value}
-                          defaultValue={Sex.Male}
+                          defaultValue={
+                            RegistrationIdentityType.PersonalIdentityCode
+                          }
                         >
-                          <Stack direction="row">
-                            <Radio value="male">Male</Radio>
-                            <Radio value="female">Female</Radio>
+                          <Stack direction={'row'}>
+                            <Radio
+                              {...register('registrationIdentityType')}
+                              value={
+                                RegistrationIdentityType.PersonalIdentityCode
+                              }
+                            >
+                              Personal identity code
+                            </Radio>
+                            <Radio
+                              {...register('registrationIdentityType')}
+                              value={RegistrationIdentityType.TaxIdentityNumber}
+                            >
+                              Tax identity number
+                            </Radio>
                           </Stack>
                         </RadioGroup>
-                      )}
-                    />
-                  </FormControl>
-                </Flex>
-                <Flex direction="column" gap={2}>
-                  <FormControl id="registrationIdentityType">
-                    <FormLabel>
-                      Personal identity code or Tax id no. in the country of
-                      residence
-                    </FormLabel>
-                    <RadioGroup
-                      defaultValue={
-                        RegistrationIdentityType.PersonalIdentityCode
-                      }
-                    >
-                      <Stack direction={'row'}>
-                        <Radio
-                          {...register('registrationIdentityType')}
-                          value={RegistrationIdentityType.PersonalIdentityCode}
-                        >
-                          Personal identity code
-                        </Radio>
-                        <Radio
-                          {...register('registrationIdentityType')}
-                          value={RegistrationIdentityType.TaxIdentityNumber}
-                        >
-                          Tax identity number
-                        </Radio>
-                      </Stack>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormControl id="registrationIdentity">
-                    <Input {...register('registrationIdentity')} />
-                  </FormControl>
-                </Flex>
-              </Flex>
+                      </FormControl>
+                      <FormControl id="registrationIdentity">
+                        <Input {...register('registrationIdentity')} />
+                      </FormControl>
+                    </Flex>
+                  </Flex>
 
                   <Divider />
 

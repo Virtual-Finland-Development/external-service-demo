@@ -38,7 +38,7 @@ export default function Modal(props: ModalProps) {
       {...(size && { size })}
     >
       <ModalOverlay />
-      <ModalContent mx={{ base: 2, md: 0 }} maxH="100%" overflowY="auto">
+      <ModalContent mx={{ base: 2, md: 0 }} maxH="100%">
         <ModalHeader>{title || ''}</ModalHeader>
         <ModalCloseButton />
         <ModalBody {...(!useBodyPadding ? { p: 0 } : { pb: 6 })}>
