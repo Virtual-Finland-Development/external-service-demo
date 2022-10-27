@@ -3,6 +3,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { format, parseISO } from 'date-fns';
 import {
   Alert,
+  AlertTitle,
+  AlertDescription,
   AlertIcon,
   Box,
   Button,
@@ -179,16 +181,15 @@ export default function RegistrationDataForm(props: Props) {
   return (
     <Box>
       {isPdfSent && (
-        <Box>
-          <Stack spacing={3}>
-            <Alert status="success" variant="left-accent">
-              <AlertIcon />
-              Information registration has been sent.
-            </Alert>
-          </Stack>
-          <Stack mt={20} alignItems="center" alignContent={'center'}>
-            <CheckCircleIcon w={20} h={20} color={'green.500'} />
-          </Stack>
+        <Box textAlign="center" py={10}>
+          <CheckCircleIcon boxSize="50px" color="green.500" />
+          <Heading as="h2" size="xl" mt={4} mb={2}>
+            Registration sent!
+          </Heading>
+          <Text color="gray.500">
+            Your registration information has been sent successfully. You can
+            close this window now.
+          </Text>
         </Box>
       )}
       {!isPdfSent && (
@@ -200,10 +201,8 @@ export default function RegistrationDataForm(props: Props) {
             gap={2}
           >
             <Box>
-              <Heading color={'blue.900'}>Register foreigner</Heading>
-              <Text color={'blue.900'}>
-                Input information about your registration
-              </Text>
+              <Heading>Register foreigner</Heading>
+              <Text>Input information about your registration</Text>
             </Box>
             <Button
               colorScheme={
