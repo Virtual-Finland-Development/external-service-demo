@@ -12,6 +12,7 @@ const mockUser = {
   regions: ['01', '02'],
   created: '2022-10-12T12:05:46.6262126Z',
   modified: '2022-10-12T12:05:46.6262127Z',
+  immigrationDataConsent: true,
 };
 
 /**

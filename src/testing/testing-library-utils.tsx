@@ -3,6 +3,7 @@ import { ReactElement } from 'react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { AppProvider } from '../context/AppContext/AppContext';
+import { ModalProvider } from '../context/ModalContext/ModalContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // https://stackoverflow.com/questions/64813447/cannot-read-property-addlistener-of-undefined-react-testing-library
@@ -25,7 +26,9 @@ const WrapperWithBrowserRouter = ({ children }: { children: ReactElement }) => (
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <AppProvider>{children}</AppProvider>
+        <AppProvider>
+          <ModalProvider>{children}</ModalProvider>
+        </AppProvider>
       </ChakraProvider>
     </QueryClientProvider>
   </BrowserRouter>
@@ -55,7 +58,9 @@ const WrapperWithMemoryRouter = ({
   <MemoryRouter initialEntries={initialEntries}>
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <AppProvider>{children}</AppProvider>
+        <AppProvider>
+          <ModalProvider>{children}</ModalProvider>
+        </AppProvider>
       </ChakraProvider>
     </QueryClientProvider>
   </MemoryRouter>
