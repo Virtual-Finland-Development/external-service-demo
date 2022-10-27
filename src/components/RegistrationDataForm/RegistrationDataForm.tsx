@@ -2,10 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { format, parseISO } from 'date-fns';
 import {
-  Alert,
-  AlertTitle,
-  AlertDescription,
-  AlertIcon,
   Box,
   Button,
   Center,
@@ -148,7 +144,7 @@ export default function RegistrationDataForm(props: Props) {
         console.log(e);
       }
     },
-    [closeModal, openModal, toast]
+    [closeModal, openModal, setModalCloseDisabled, toast]
   );
 
   /**
