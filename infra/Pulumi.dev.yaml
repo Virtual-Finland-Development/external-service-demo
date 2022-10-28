@@ -1,0 +1,5 @@
+config:
+  aws:region: eu-north-1
+  external-service-demo:errorDocument: index.html
+  external-service-demo:indexDocument: index.html
+  external-service-demo:path: ../public
