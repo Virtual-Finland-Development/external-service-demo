@@ -9,7 +9,7 @@ const indexDocument = config.get('indexDocument') || 'index.html';
 const errorDocument = config.get('errorDocument') || 'index.html';
 
 // Values that should perhaps be auto-generated or come from config
-const env = 'dev'; // Get this from GitHub workflow? Is this same as Pulumi Stack name?
+const env = pulumi.getStack(); // Get this from GitHub workflow? Is this same as Pulumi Stack name?
 const projectName = pulumi.getProject();
 const bucketName = `${projectName}-${env}`;
 
