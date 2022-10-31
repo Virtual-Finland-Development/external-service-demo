@@ -122,5 +122,12 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   const resetButton = form.getButton('Tyjenna');
   form.removeField(resetButton);
 
+  const fields = form.getFields();
+
+  // make all fields read only after filling, if user wish to download the pdf it will not be editable
+  fields.forEach(field => {
+    field.enableReadOnly();
+  });
+
   return pdfDoc.save();
 }

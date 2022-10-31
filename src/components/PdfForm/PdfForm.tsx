@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Flex, useBreakpointValue, Button } from '@chakra-ui/react';
+import {
+  Flex,
+  useBreakpointValue,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@chakra-ui/react';
 import { EmailIcon } from '@chakra-ui/icons';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { SizeMe } from 'react-sizeme';
@@ -9,6 +17,14 @@ import { ProfileFormData } from '../../@types';
 import Loading from '../Loading/Loading';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+function downloadPdf(file: Blob) {
+  const fileURL = window.URL.createObjectURL(file);
+  let alink = document.createElement('a');
+  alink.href = fileURL;
+  alink.download = 'Registration Form.pdf';
+  alink.click();
+}
 
 interface Props {
   profileData: ProfileFormData | undefined;
@@ -40,15 +56,18 @@ export default function PdfForm(props: Props) {
     });
   }, [profileData]);
 
-  const onSendClick = () => {
+  const onSendClick = (download: boolean) => {
     disableModalClose();
     setLoading(true);
 
     setTimeout(() => {
       sendCallback();
+
+      if (file && download) {
+        downloadPdf(file);
+      }
     }, 1000);
   };
-
   useEffect(() => {
     loadDataFromApiAndFillPdf();
   }, [loadDataFromApiAndFillPdf]);
@@ -69,17 +88,25 @@ export default function PdfForm(props: Props) {
           </Flex>
         )}
       </SizeMe>
-      <Button
-        colorScheme={'blue'}
-        w="auto"
-        mx={6}
-        mb={6}
-        alignSelf="end"
-        leftIcon={<EmailIcon />}
-        onClick={onSendClick}
-      >
-        Send
-      </Button>
+      <Menu>
+        <MenuButton
+          as={Button}
+          colorScheme={'blue'}
+          w="auto"
+          mx={6}
+          mb={6}
+          alignSelf="end"
+          leftIcon={<EmailIcon />}
+        >
+          Send
+        </MenuButton>
+        <MenuList>
+          <MenuItem onClick={() => onSendClick(true)}>
+            Send and download
+          </MenuItem>
+          <MenuItem onClick={() => onSendClick(false)}>Send only</MenuItem>
+        </MenuList>
+      </Menu>
     </Flex>
   );
 }
