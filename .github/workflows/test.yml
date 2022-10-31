@@ -39,6 +39,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
+        working-directory: ./infra
         run: npm ci
       - name: Preview Pulumi
         uses: pulumi/actions@v3
