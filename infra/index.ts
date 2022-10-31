@@ -8,12 +8,11 @@ const path = config.get('path') || '../public';
 const indexDocument = config.get('indexDocument') || 'index.html';
 const errorDocument = config.get('errorDocument') || 'index.html';
 
-// Values that should perhaps be auto-generated or come from config
-const env = pulumi.getStack(); // Get this from GitHub workflow? Is this same as Pulumi Stack name?
+const env = pulumi.getStack();
 const projectName = pulumi.getProject();
-const bucketName = `${projectName}-${env}`;
 
 // Create an S3 bucket and configure it as a website.
+const bucketName = `${projectName}-s3-bucket-${env}`;
 const bucket = new aws.s3.Bucket(bucketName, {
   acl: 'public-read',
   website: {
@@ -27,7 +26,7 @@ const bucket = new aws.s3.Bucket(bucketName, {
 });
 
 // Use a synced folder to manage the files of the website.
-new synced_folder.S3BucketFolder(`${projectName}-bucket-folder`, {
+new synced_folder.S3BucketFolder(`${projectName}-s3-bucket-folder-${env}`, {
   path: path,
   bucketName: bucket.bucket,
   acl: 'public-read',
@@ -35,7 +34,8 @@ new synced_folder.S3BucketFolder(`${projectName}-bucket-folder`, {
 });
 
 // Create a CloudFront CDN to distribute and cache the website.
-const cdn = new aws.cloudfront.Distribution('cdn', {
+const cdnName = `${projectName}-cdn-${env}`;
+const cdn = new aws.cloudfront.Distribution(cdnName, {
   enabled: true,
   origins: [
     {
@@ -66,7 +66,7 @@ const cdn = new aws.cloudfront.Distribution('cdn', {
       },
     },
   },
-  priceClass: 'PriceClass_100',
+  priceClass: 'PriceClass_All',
   customErrorResponses: [
     {
       errorCode: 404,
