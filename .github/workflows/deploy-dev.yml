@@ -1,4 +1,4 @@
-name: Build, test and deploy application to S3 bucket with Pulumi
+name: Deploy to development environment
 on:
   push:
     branches:
