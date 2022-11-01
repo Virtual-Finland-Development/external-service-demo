@@ -12,13 +12,14 @@ on:
         default: dev
 
 env:
-  STACK_ENVIRONMENT: ${{ github.event.inputs.env }}
+  pulumi_stack_organization: virtualfinland
+  stack: ${{ github.event.inputs.env }}
 
 jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    environment: $STACK_ENVIRONMENT
+    environment: ${{ env.stack }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
@@ -48,7 +49,7 @@ jobs:
     name: Deploy to S3
     needs: build
     runs-on: ubuntu-latest
-    environment: $STACK_ENVIRONMENT
+    environment: ${{ env.stack }}
     steps:
       - uses: actions/checkout@v3
       - name: Download build artifact
@@ -67,7 +68,8 @@ jobs:
         with:
           work-dir: ./infra
           command: up
-          stack-name: virtualfinland/$STACK_ENVIRONMENT
+          stack-name: ${{ env.pulumi_stack_organization }}/${{ env.stack }}
+          upsert: true
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
