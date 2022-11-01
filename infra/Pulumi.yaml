@@ -1,0 +1,3 @@
+name: external-service-demo
+description: External service demo app made with React
+runtime: nodejs
