@@ -1,4 +1,4 @@
-name: Deploy to development environment
+name: Deploy automatically to development environment
 on:
   push:
     branches:
@@ -20,7 +20,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Run tests
         run: npm test
       - name: Build application
