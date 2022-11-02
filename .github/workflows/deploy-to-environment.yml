@@ -64,7 +64,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Run Pulumi deployment
-        uses: pulumi/action@v3
+        uses: pulumi/actions@v3
         with:
           work-dir: ./infra
           command: up
