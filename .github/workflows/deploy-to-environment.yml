@@ -19,7 +19,7 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    environment: $PULUMI_STACK
+    environment: echo $PULUMI_STACK
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
@@ -42,14 +42,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Application_Artifact
-          path: /home/runner/work/external-service-demo/build/
+          path: build/
           retention-days: 2
 
   deploy:
     name: Deploy to S3
     needs: build-and-test
     runs-on: ubuntu-latest
-    environment: $PULUMI_STACK
+    environment: echo $PULUMI_STACK
     steps:
       - uses: actions/checkout@v3
       - name: Download build artifact
