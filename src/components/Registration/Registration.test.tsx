@@ -35,7 +35,7 @@ describe('<Registration />', () => {
     expect(lastNameInput).toHaveValue('Duck');
   });
 
-  test('User opens form preview, sends the form, form has been sent.', async () => {
+  test.skip('User opens form preview, sends the form, form has been sent.', async () => {
     customRender1(<Registration />);
 
     // use fake timers (setTimout calls)
