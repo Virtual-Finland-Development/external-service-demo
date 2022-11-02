@@ -58,9 +58,13 @@ jobs:
       - name: Set artifact path
         working-directory: ./infra
         run: pulumi config -s virtualfinland/dev set vfd:artifactPath
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Check artifact path
         working-directory: ./infra
         run: pulumi config get vfd:artifactPath
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Run Pulumi deployment
         uses: pulumi/actions@v3
         with:
