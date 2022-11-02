@@ -56,8 +56,10 @@ jobs:
         run: npm ci
         working-directory: ./infra
       - name: Set artifact path
+        working-directory: ./infra
         run: pulumi config -s virtualfinland/dev set vfd:artifactPath
       - name: Check artifact path
+        working-directory: ./infra
         run: pulumi config get vfd:artifactPath
       - name: Run Pulumi deployment
         uses: pulumi/actions@v3
