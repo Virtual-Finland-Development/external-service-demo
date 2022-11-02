@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Application_Artifact
-          path: /home/runner/work/external-service-demo/public/
+          path: /home/runner/work/external-service-demo/build/
           retention-days: 2
 
   deploy:
