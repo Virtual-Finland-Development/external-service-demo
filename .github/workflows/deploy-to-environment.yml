@@ -30,8 +30,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
         run: npm ci
-      - name: Run tests
-        run: npm test
       - name: Build application
         run: npm run build
       - name: Upload build artifact
