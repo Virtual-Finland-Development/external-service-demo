@@ -37,7 +37,7 @@ const cdn = new aws.cloudfront.Distribution(
     origins: [
       {
         originId: bucket.arn,
-        domainName: bucket.websiteEndpoint,
+        domainName: bucket.bucketRegionalDomainName,
         s3OriginConfig: {
           originAccessIdentity: new aws.cloudfront.OriginAccessIdentity(
             `${projectName}-oai`,
