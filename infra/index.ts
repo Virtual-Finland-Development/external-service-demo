@@ -113,6 +113,8 @@ const cdn = new aws.cloudfront.Distribution(
 
 // Bucket policy for S3
 const bucketPolicyForCloudfront = aws.iam.getPolicyDocumentOutput({
+  version: '2008-10-17',
+  policyId: 'PolicyForCloudFrontPrivateContent',
   statements: [
     {
       sid: 'AllowCloudFrontServicePrincipal',
