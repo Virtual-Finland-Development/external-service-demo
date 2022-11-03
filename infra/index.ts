@@ -24,6 +24,13 @@ const bucket = new aws.s3.Bucket(bucketName, {
   },
 });
 
+const originAccessIdentity = new aws.cloudfront.OriginAccessIdentity(
+  `${projectName}-oai`,
+  {
+    comment: `Origin access identity for ${projectName}`,
+  }
+);
+
 // Create a CloudFront CDN to distribute and cache the website.
 const cdnName = `${projectName}-cdn-${env}`;
 const cdn = new aws.cloudfront.Distribution(
@@ -39,12 +46,7 @@ const cdn = new aws.cloudfront.Distribution(
         originId: bucket.arn,
         domainName: bucket.bucketRegionalDomainName,
         s3OriginConfig: {
-          originAccessIdentity: new aws.cloudfront.OriginAccessIdentity(
-            `${projectName}-oai`,
-            {
-              comment: `Origin access identity for ${projectName}`,
-            }
-          ).cloudfrontAccessIdentityPath,
+          originAccessIdentity: originAccessIdentity.cloudfrontAccessIdentityPath,
         },
       },
     ],
@@ -126,7 +128,7 @@ const bucketPolicyForCloudfront = aws.iam.getPolicyDocumentOutput({
         },
       ],
       actions: ['s3:GetObject'],
-      resources: [bucket.arn, pulumi.interpolate`${bucket.arn}/*`],
+      resources: [pulumi.interpolate`${bucket.arn}/*`],
       conditions: [
         {
           test: 'StringEquals',
@@ -134,6 +136,18 @@ const bucketPolicyForCloudfront = aws.iam.getPolicyDocumentOutput({
           values: [cdn.arn],
         },
       ],
+    },
+    {
+      sid: 'AllowLegacyOAIReadOnly',
+      effect: 'Allow',
+      principals: [
+        {
+          type: 'AWS',
+          identifiers: [originAccessIdentity.iamArn],
+        },
+      ],
+      actions: ['s3:GetObject'],
+      resources: [pulumi.interpolate`${bucket.arn}/*`],
     },
   ],
 });
