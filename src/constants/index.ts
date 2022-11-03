@@ -6,9 +6,7 @@ export const SESSION_STORAGE_ROUTE_NAME = 'esd-route-name';
 
 // appContext
 const applicationBaseUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'http://localhost:3001'
-    : 'http://localhost:3001';
+  process.env.USER_API_BASE_URL || 'http://localhost:3001';
 const applicationContextObj = {
   appName: 'access-to-finland-demo',
   redirectUrl: `${applicationBaseUrl}/auth-redirect`,
