@@ -2,14 +2,10 @@ name: Manually deploy to selected environment
 on:
   workflow_dispatch:
     inputs:
-      env:
-        type: string
+      environment:
+        description: Environment where to deploy the stack (dev, staging)
+        type: environment
         required: true
-        description: Environment where to deploy the stack
-        options:
-          - dev
-          - staging
-        default: dev
 
 env:
   PULUMI_ORGANIZATION: virtualfinland
@@ -19,7 +15,7 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
-    environment: echo $PULUMI_STACK
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
@@ -49,7 +45,7 @@ jobs:
     name: Deploy to S3
     needs: build-and-test
     runs-on: ubuntu-latest
-    environment: echo $PULUMI_STACK
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
       - name: Download build artifact
@@ -68,7 +64,7 @@ jobs:
         with:
           work-dir: ./infra
           command: up
-          stack-name: $PULUMI_ORGANIZATION/$PULUMI_STACK
+          stack-name: virtualfinland/${{ inputs.environment }}
           upsert: true
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
