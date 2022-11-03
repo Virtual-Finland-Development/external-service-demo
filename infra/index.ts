@@ -153,7 +153,7 @@ const bucketPolicyForCloudfront = aws.iam.getPolicyDocumentOutput({
 });
 
 new aws.s3.BucketPolicy('bucketPolicyName', {
-  bucket: bucket.arn,
+  bucket: bucket.bucket,
   policy: bucketPolicyForCloudfront.apply(policy => policy.json),
 });
 
