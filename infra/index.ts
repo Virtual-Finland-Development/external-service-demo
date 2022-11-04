@@ -46,7 +46,8 @@ const cdn = new aws.cloudfront.Distribution(
         originId: bucket.arn,
         domainName: bucket.bucketRegionalDomainName,
         s3OriginConfig: {
-          originAccessIdentity: originAccessIdentity.cloudfrontAccessIdentityPath,
+          originAccessIdentity:
+            originAccessIdentity.cloudfrontAccessIdentityPath,
         },
       },
     ],
@@ -165,8 +166,4 @@ new synced_folder.S3BucketFolder(`${projectName}-s3-bucket-folder-${env}`, {
   managedObjects: false,
 });
 
-// Export the URLs and hostnames of the bucket and distribution.
-export const originURL = pulumi.interpolate`http://${bucket.websiteEndpoint}`;
-export const originHostname = bucket.websiteEndpoint;
 export const cdnURL = pulumi.interpolate`https://${cdn.domainName}`;
-export const cdnHostname = cdn.domainName;
