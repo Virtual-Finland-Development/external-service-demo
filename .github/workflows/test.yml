@@ -8,6 +8,7 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest
+    if: ! github.event.pull_request.draft
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
@@ -27,6 +28,7 @@ jobs:
   preview-pulumi:
     name: Preview pulumi
     runs-on: ubuntu-latest
+    if: ! github.event.pull_request.draft
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
