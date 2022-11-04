@@ -5,13 +5,21 @@ export const SESSION_STORAGE_AUTH_USER_ID = 'esd-auth-user-id';
 export const SESSION_STORAGE_ROUTE_NAME = 'esd-route-name';
 
 // appContext
-const applicationBaseUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'http://localhost:3001'
-    : 'http://localhost:3001';
+export const APP_BASE_URL = (() => {
+  const {
+    location: { protocol, hostname, port },
+  } = window;
+
+  if (process.env.NODE_ENV === 'development') {
+    return `${protocol}//${hostname}:${port}`;
+  } else {
+    return `${protocol}//${hostname}`;
+  }
+})();
+
 const applicationContextObj = {
   appName: 'access-to-finland-demo',
-  redirectUrl: `${applicationBaseUrl}/auth-redirect`,
+  redirectUrl: `${APP_BASE_URL}/auth-redirect`,
 };
 export const appContextUrlEncoded = (() => {
   const appContextBase64 = btoa(JSON.stringify(applicationContextObj));
