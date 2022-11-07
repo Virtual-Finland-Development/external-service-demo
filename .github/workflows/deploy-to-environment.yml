@@ -9,6 +9,7 @@ on:
 
 env:
   PULUMI_ORGANIZATION: virtualfinland
+  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
 jobs:
   build-and-test:
@@ -61,13 +62,9 @@ jobs:
       - name: Select Pulumi stack
         working-directory: ./infra
         run: pulumi stack select ${{ env.PULUMI_ORGANIZATION }}/${{ inputs.environment }} --create
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Set artifact path in Pulumi config
         working-directory: ./infra
         run: pulumi config set artifactPath ../public/
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Run Pulumi deployment
         working-directory: ./infra
         run: pulumi up -y
