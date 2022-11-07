@@ -97,8 +97,8 @@ export default function RegistrationDataForm(props: Props) {
         countryOfBirthCode: profileApiData.countryOfBirthCode
           ? getCountryValue(lists.countries, profileApiData.countryOfBirthCode)
           : undefined,
-        nationalityCode: profileApiData.nationalityCode
-          ? getCountryValue(lists.countries, profileApiData.nationalityCode)
+        citizenshipCode: profileApiData.citizenshipCode
+          ? getCountryValue(lists.countries, profileApiData.citizenshipCode)
           : undefined,
         occupationCode: profileApiData.occupationCode
           ? getOccupationValue(lists.occupations, profileApiData.occupationCode)
@@ -346,9 +346,9 @@ export default function RegistrationDataForm(props: Props) {
                       <FormLabel>Occupation</FormLabel>
                       <Input {...register('occupationCode')} />
                     </FormControl>
-                    <FormControl id="nationalityCode  ">
+                    <FormControl id="citizenshipCode">
                       <FormLabel>Citizenship</FormLabel>
-                      <Input {...register('nationalityCode')} />
+                      <Input {...register('citizenshipCode')} />
                     </FormControl>
                   </Flex>
 
