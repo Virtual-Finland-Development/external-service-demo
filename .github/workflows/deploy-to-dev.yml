@@ -30,6 +30,11 @@ jobs:
         env:
           REACT_APP_AUTH_GW_BASE_URL: ${{ secrets.AUTH_GW_BASE_URL }}
           REACT_APP_USER_API_BASE_URL: ${{ secrets.USER_API_BASE_URL }}
+          REACT_APP_ENVIRONMENT: ${{ inputs.environment }}
+      - name: Print some secret
+        run: |
+          echo Running build for ${{ inputs.environment }} environment
+          echo User API base URL is ${{ secrets.DUMMY_API_URL }}
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
