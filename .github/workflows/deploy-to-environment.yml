@@ -9,7 +9,6 @@ on:
 
 env:
   PULUMI_ORGANIZATION: virtualfinland
-  PULUMI_STACK: dev
 
 jobs:
   build-and-test:
