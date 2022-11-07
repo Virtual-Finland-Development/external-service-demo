@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 // endpoints
-import { AUTH_GW_ENDPOINT, USER_API_ENDPOINT } from '../../api/endpoints';
+import { AUTH_GW_ENDPOINT, USER_API_BASE_URL } from '../../api/endpoints';
 
 const mockUser = {
   id: '12312-123123-asdasd',
@@ -36,7 +36,7 @@ export const handlers = [
       );
     }
   ),
-  rest.get(`${USER_API_ENDPOINT}/identity/verify`, (req, res, ctx) => {
+  rest.get(`${USER_API_BASE_URL}/identity/verify`, (req, res, ctx) => {
     return res(
       ctx.json({
         id: mockUser.id,
@@ -45,13 +45,13 @@ export const handlers = [
       })
     );
   }),
-  rest.get(`${USER_API_ENDPOINT}/user`, (req, res, ctx) => {
+  rest.get(`${USER_API_BASE_URL}/user`, (req, res, ctx) => {
     return res(ctx.json(mockUser));
   }),
-  rest.patch(`${USER_API_ENDPOINT}/user`, (req, res, ctx) => {
+  rest.patch(`${USER_API_BASE_URL}/user`, (req, res, ctx) => {
     return res(ctx.json(mockUser));
   }),
-  rest.get(`${USER_API_ENDPOINT}/code-sets/countries`, (req, res, ctx) => {
+  rest.get(`${USER_API_BASE_URL}/code-sets/countries`, (req, res, ctx) => {
     return res(
       ctx.json([
         {
@@ -65,7 +65,7 @@ export const handlers = [
       ])
     );
   }),
-  rest.get(`${USER_API_ENDPOINT}/code-sets/occupations`, (req, res, ctx) => {
+  rest.get(`${USER_API_BASE_URL}/code-sets/occupations`, (req, res, ctx) => {
     return res(
       ctx.json([
         {
@@ -77,7 +77,7 @@ export const handlers = [
       ])
     );
   }),
-  rest.get(`${USER_API_ENDPOINT}/code-sets/languages`, (req, res, ctx) => {
+  rest.get(`${USER_API_BASE_URL}/code-sets/languages`, (req, res, ctx) => {
     return res(
       ctx.json([
         {
