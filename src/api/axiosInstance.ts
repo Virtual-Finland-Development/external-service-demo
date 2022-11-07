@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // endpoints
-import { USER_API_ENDPOINT } from './endpoints';
+import { USER_API_BASE_URL } from './endpoints';
 
 // constants
 import {
@@ -17,11 +17,11 @@ import { JSONSessionStorage } from '../utils';
 const axiosInstance = axios.create();
 
 const USER_API_URLS = [
-  `${USER_API_ENDPOINT}/identity/verify`,
-  `${USER_API_ENDPOINT}/user`,
-  `${USER_API_ENDPOINT}/code-sets/countries`,
-  `${USER_API_ENDPOINT}/code-sets/occupations`,
-  `${USER_API_ENDPOINT}/code-sets/languages`,
+  `${USER_API_BASE_URL}/identity/verify`,
+  `${USER_API_BASE_URL}/user`,
+  `${USER_API_BASE_URL}/code-sets/countries`,
+  `${USER_API_BASE_URL}/code-sets/occupations`,
+  `${USER_API_BASE_URL}/code-sets/languages`,
 ];
 
 // Axios request interceptor. Pass token to request Authorization for selected routes, if found.
