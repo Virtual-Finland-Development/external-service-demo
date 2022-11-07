@@ -7,10 +7,6 @@ on:
         type: environment
         required: true
 
-env:
-  PULUMI_ORGANIZATION: virtualfinland
-  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-
 jobs:
   build-and-test:
     name: Build and test
@@ -47,6 +43,9 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    env:
+      PULUMI_ORGANIZATION: virtualfinland
+      PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - name: Download build artifact
