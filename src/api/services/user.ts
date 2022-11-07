@@ -7,7 +7,7 @@ import { UserProfile } from '../../@types';
 import { USER_API_ENDPOINT } from '../endpoints';
 
 export async function verify() {
-  return axiosInstance.get(`${USER_API_ENDPOINT}/identity/testbed/verify`);
+  return axiosInstance.get(`${USER_API_ENDPOINT}/identity/verify`);
 }
 
 export async function get() {

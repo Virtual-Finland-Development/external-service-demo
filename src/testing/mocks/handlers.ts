@@ -36,7 +36,7 @@ export const handlers = [
       );
     }
   ),
-  rest.get(`${USER_API_ENDPOINT}/identity/testbed/verify`, (req, res, ctx) => {
+  rest.get(`${USER_API_ENDPOINT}/identity/verify`, (req, res, ctx) => {
     return res(
       ctx.json({
         id: mockUser.id,
