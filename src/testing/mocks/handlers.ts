@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 // endpoints
-import { AUTH_GW_ENDPOINT, USER_API_BASE_URL } from '../../api/endpoints';
+import { AUTH_GW_BASE_URL, USER_API_BASE_URL } from '../../api/endpoints';
 
 const mockUser = {
   id: '12312-123123-asdasd',
@@ -20,13 +20,13 @@ const mockUser = {
  */
 export const handlers = [
   rest.post(
-    `${AUTH_GW_ENDPOINT}/auth/openid/testbed/auth-token-request`,
+    `${AUTH_GW_BASE_URL}/auth/openid/testbed/auth-token-request`,
     (req, res, ctx) => {
       return res(ctx.json({ token: '123-random-token' }));
     }
   ),
   rest.post(
-    `${AUTH_GW_ENDPOINT}/auth/openid/testbed/user-info-request`,
+    `${AUTH_GW_BASE_URL}/auth/openid/testbed/user-info-request`,
     (req, res, ctx) => {
       return res(
         ctx.json({

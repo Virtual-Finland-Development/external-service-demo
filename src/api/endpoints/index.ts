@@ -1,4 +1,4 @@
-export const AUTH_GW_ENDPOINT =
+export const AUTH_GW_BASE_URL =
   process.env.REACT_APP_AUTH_GW_BASE_URL ||
   'https://q88uo5prmh.execute-api.eu-north-1.amazonaws.com';
 
