@@ -60,7 +60,7 @@ jobs:
         uses: pulumi/setup-pulumi@v2
       - name: Select Pulumi stack
         working-directory: ./infra
-        run: pulumi stack --create --select ${{ env.PULUMI_ORGANIZATION }}/${{ inputs.environment }}
+        run: pulumi stack select ${{ env.PULUMI_ORGANIZATION }}/${{ inputs.environment }} --create
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Set artifact path in Pulumi config
