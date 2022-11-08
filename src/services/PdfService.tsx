@@ -6,13 +6,6 @@ import {
   RegistrationIdentityType,
   Sex,
 } from '../@types';
-import { wait } from '@testing-library/user-event/dist/utils';
-
-export async function sendPdf() {
-  console.log('Trying to send PDF');
-  localStorage.setItem('pdfSendState', 'true');
-  await wait(500); // Artificial delay to simulate waiting for API response
-}
 
 export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   const pdfDoc = await PDFDocument.load(bytes),
@@ -70,7 +63,7 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   );
 
   // Female cannot be set, because there is no checkbox field for it ":D"
-  if (data.sex === Sex.Male) {
+  if (data.gender === Sex.Male) {
     sexCheckbox.check();
   }
 
@@ -90,15 +83,23 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   countryOfOrigin.setText(data.countryOfBirthCode);
   districtOfOrigin.setText(data.districtOfOrigin);
 
-  nativeLanguage.setText(data.nativeLanguage);
+  nativeLanguage.setText(data.nativeLanguageCode);
   occupation.setText(data.occupationCode);
   citizenship.setText(data.citizenshipCode);
 
   addressInFinland.setText(data.addressInFinland);
   addressAbroad.setText(data.address);
 
-  dateOfArrivalInFinland.setText(data.dateOfArrivalInFinland);
-  endDateOfStayInFinland.setText(data.endDateOfStayInFinland);
+  dateOfArrivalInFinland.setText(
+    data.dateOfArrivalInFinland
+      ? format(parseISO(data.dateOfArrivalInFinland), 'dd.MM.yyyy')
+      : ''
+  );
+  endDateOfStayInFinland.setText(
+    data.endDateOfStayInFinland
+      ? format(parseISO(data.endDateOfStayInFinland), 'dd.MM.yyyy')
+      : ''
+  );
 
   if (data.reasonForRecordingInformation) {
     switch (data.reasonForRecordingInformation) {

@@ -74,15 +74,18 @@ export default function RegistrationDataForm(props: Props) {
   const { profileApiData, saveUserConsent, lists, isLoading } = props;
   const { openModal, closeModal, setModalCloseDisabled } = useModal();
 
-  const { handleSubmit, register, reset, control } = useForm<ProfileFormData>({
-    mode: 'onSubmit',
-    defaultValues: {
-      registrationIdentityType: RegistrationIdentityType.PersonalIdentityCode,
-      sex: Sex.Male,
-      reasonForRecordingInformation:
-        InformationRegistrationReason.WorkingInFinland,
-    },
-  });
+  const { handleSubmit, register, reset, control, watch } =
+    useForm<ProfileFormData>({
+      mode: 'onSubmit',
+      defaultValues: {
+        registrationIdentityType: RegistrationIdentityType.PersonalIdentityCode,
+        gender: Sex.Male,
+        reasonForRecordingInformation:
+          InformationRegistrationReason.WorkingInFinland,
+      },
+    });
+
+  const { reasonForRecordingInformation } = watch();
 
   /**
    * After user have given consent, reset the form with pre-defined values from user profile.
@@ -269,7 +272,7 @@ export default function RegistrationDataForm(props: Props) {
                           Input date in d.m.yyyyy format
                         </FormHelperText>
                       </FormControl>
-                      <FormControl id="sex">
+                      <FormControl id="gender">
                         <FormLabel>Sex</FormLabel>
                         <Controller
                           name="gender"
@@ -424,11 +427,14 @@ export default function RegistrationDataForm(props: Props) {
                         >
                           Other particular reason (please give details):
                         </Radio>
-                        <Input
-                          {...register(
-                            'reasonForRecordingInformationDescription'
-                          )}
-                        />
+                        {reasonForRecordingInformation ===
+                          InformationRegistrationReason.Other && (
+                          <Input
+                            {...register(
+                              'reasonForRecordingInformationDescription'
+                            )}
+                          />
+                        )}
                       </Stack>
                     </RadioGroup>
                   </FormControl>
