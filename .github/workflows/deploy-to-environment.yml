@@ -46,13 +46,16 @@ jobs:
     env:
       PULUMI_ORGANIZATION: virtualfinland
       PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+    defaults:
+      run:
+        working-directory: ./infra
     steps:
       - uses: actions/checkout@v3
       - name: Download build artifact
         uses: actions/download-artifact@v3
         with:
           name: Application_Artifact
-          path: ./public/
+          path: release/
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
@@ -62,14 +65,10 @@ jobs:
       - name: Install Pulumi CLI
         uses: pulumi/setup-pulumi@v2
       - name: Install dependencies
-        working-directory: ./infra
         run: npm ci
       - name: Select Pulumi stack
-        working-directory: ./infra
         run: pulumi stack select ${{ env.PULUMI_ORGANIZATION }}/${{ inputs.environment }} --create
       - name: Set artifact path in Pulumi config
-        working-directory: ./infra
-        run: pulumi config set artifactPath ../public/
+        run: pulumi config set artifactPath release/
       - name: Run Pulumi deployment
-        working-directory: ./infra
         run: pulumi up -y
