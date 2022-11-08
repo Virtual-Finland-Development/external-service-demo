@@ -3,6 +3,8 @@ import {
   waitFor,
   screen,
   act,
+  waitForElementToBeRemoved,
+  fireEvent,
 } from '../../testing/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 import Registration from './Registration';
@@ -35,7 +37,7 @@ describe('<Registration />', () => {
     expect(lastNameInput).toHaveValue('Duck');
   });
 
-  test.skip('User opens form preview, sends the form, form has been sent.', async () => {
+  test('User opens form preview, sends the form, form has been sent.', async () => {
     customRender1(<Registration />);
 
     // use fake timers (setTimout calls)
@@ -48,21 +50,28 @@ describe('<Registration />', () => {
 
     userEvent.click(previewButton);
 
-    const sendButton = await screen.findByRole('button', {
+    const sendMenuToggle = await screen.findByRole('button', {
       name: /send/i,
     });
-    expect(sendButton).toBeInTheDocument();
 
-    userEvent.click(sendButton);
+    expect(sendMenuToggle).toBeInTheDocument();
+
+    userEvent.click(sendMenuToggle);
+
+    const sendOnlyButton = await screen.findByText('Send only');
+    expect(sendOnlyButton).toBeInTheDocument();
 
     // to tell the unit test that timers will update component's state
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
+      userEvent.click(sendOnlyButton);
       jest.runAllTimers();
     });
 
-    const sentHeader = await screen.findByRole('heading', {
+    const sentHeader = screen.getByRole('heading', {
       name: /registration sent!/i,
     });
+
     expect(sentHeader).toBeInTheDocument();
 
     // restore original JS timer behaviour
