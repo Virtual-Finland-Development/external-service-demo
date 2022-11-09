@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { isPast, parseISO } from 'date-fns';
 
 // endpoints
 import { USER_API_BASE_URL } from './endpoints';
@@ -47,8 +48,16 @@ axiosInstance.interceptors.response.use(
   error => {
     const provider = sessionStorage.getItem(SESSION_STORAGE_AUTH_PROVIDER);
     const authTokens = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS);
+    const hasExpired = authTokens?.expiresAt
+      ? isPast(parseISO(authTokens.expiresAt))
+      : false;
 
-    if (provider && authTokens && error?.response?.status === 401) {
+    if (
+      provider &&
+      authTokens &&
+      error?.response?.status === 401 &&
+      hasExpired
+    ) {
       alert('Your session has expired, please authenticate to continue.');
       sessionStorage.clear();
       window.postMessage(REQUEST_NOT_AUTHORIZED);
