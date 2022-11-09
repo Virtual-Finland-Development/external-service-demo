@@ -117,7 +117,6 @@ function AppProvider({ children }: AppProviderProps) {
   const verifyUser = useCallback(async () => {
     try {
       await api.user.verify();
-      await fetchUserConsents();
     } catch (error: any) {
       dispatch({ type: ActionTypes.SET_ERROR, error });
       toast({
@@ -129,20 +128,27 @@ function AppProvider({ children }: AppProviderProps) {
         isClosable: true,
       });
     }
-  }, [fetchUserConsents, toast]);
+  }, [toast]);
 
   /**
    * Store auth keys to session storage, continue to verify user after authentication (Auth.tsx).
    */
   const storeAuthKeysAndVerifyUser = useCallback(
-    (authProvider: AuthProvider, tokens: AuthTokens, authUserId: string) => {
+    async (
+      authProvider: AuthProvider,
+      tokens: AuthTokens,
+      authUserId: string
+    ) => {
       sessionStorage.setItem(SESSION_STORAGE_AUTH_PROVIDER, authProvider);
       sessionStorage.setItem(SESSION_STORAGE_AUTH_USER_ID, authUserId);
       JSONSessionStorage.set(SESSION_STORAGE_AUTH_TOKENS, tokens);
       dispatch({ type: ActionTypes.SET_LOADING, loading: true });
-      verifyUser();
+      await verifyUser();
+      await fetchUserConsents();
+      dispatch({ type: ActionTypes.LOG_IN });
+      dispatch({ type: ActionTypes.SET_LOADING, loading: false });
     },
-    [verifyUser]
+    [fetchUserConsents, verifyUser]
   );
 
   /**
