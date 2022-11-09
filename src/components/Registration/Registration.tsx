@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Stack } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
-// types
-import { Stack } from '@chakra-ui/react';
-import { ProfileFormData } from '../../@types';
+// context
+import { useAppContext } from '../../context/AppContext/AppContext';
 
 // hooks
 import useCountries from '../../hooks/useCountries';
@@ -19,9 +19,9 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import api from '../../api';
 
 export default function Registration() {
-  const [profileApiData, setProfileApiData] = useState<
-    Partial<ProfileFormData> | undefined
-  >(undefined);
+  const { setUserProfile } = useAppContext();
+
+  const [profileDataUsed, setProfileDataUsed] = useState<boolean>(false);
   const [profileLoading, setProfileLoading] = useState<boolean>(false);
 
   // User api provided lists and metadata
@@ -32,18 +32,56 @@ export default function Registration() {
   const listsLoading =
     countriesLoading || occupationsLoading || languagesLoading;
 
+  const toast = useToast();
+
   /**
    * Save user immigrationDataConsent.
    * Response returns full user profile to be used to pre-fill RegistrationDataForm
    */
-  const saveUserConsent = async () => {
+  const saveUserConsent = async (immigrationDataConsent: boolean) => {
     setProfileLoading(true);
 
     try {
-      const response = await api.user.patch({ immigrationDataConsent: true });
-      setProfileApiData(response.data);
-    } catch (error) {
-      console.log(error);
+      const response = await api.user.patch({ immigrationDataConsent });
+      setUserProfile(response.data);
+
+      if (immigrationDataConsent) {
+        setProfileDataUsed(true);
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error.',
+        description:
+          error?.message || 'Something went wrong, please try again later.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  /**
+   * Fetch user profile.
+   * User has given immigrationDataConsent already, profile can be fetched.
+   */
+  const fetchUserProfile = async () => {
+    setProfileLoading(true);
+
+    try {
+      const response = await api.user.get();
+      setUserProfile(response.data);
+      setProfileDataUsed(true);
+    } catch (error: any) {
+      toast({
+        title: 'Error.',
+        description:
+          error?.message || 'Something went wrong, please try again later.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } finally {
       setProfileLoading(false);
     }
@@ -70,14 +108,15 @@ export default function Registration() {
   return (
     <Stack alignItems="center">
       <RegistrationDataForm
-        profileApiData={profileApiData}
         saveUserConsent={saveUserConsent}
+        fetchUserProfile={fetchUserProfile}
         lists={{
           countries,
           occupations,
           languages,
         }}
         isLoading={profileLoading}
+        profileDataUsed={profileDataUsed}
       />
     </Stack>
   );
