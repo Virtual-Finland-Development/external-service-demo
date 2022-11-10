@@ -92,13 +92,31 @@ function AppProvider({ children }: AppProviderProps) {
   }, []);
 
   /**
+   * Fetch user consents
+   */
+  const fetchUserConsents = useCallback(async () => {
+    try {
+      const response = await api.user.getConsents();
+      setUserProfile(response.data);
+    } catch (error: any) {
+      dispatch({ type: ActionTypes.SET_ERROR, error });
+      toast({
+        title: 'Error.',
+        description:
+          error?.message || 'Something went wrong, please try again later.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  }, [setUserProfile, toast]);
+
+  /**
    * Verify api user after authentication.
    */
   const verifyUser = useCallback(async () => {
     try {
       await api.user.verify();
-      dispatch({ type: ActionTypes.LOG_IN });
-      dispatch({ type: ActionTypes.SET_LOADING, loading: false });
     } catch (error: any) {
       dispatch({ type: ActionTypes.SET_ERROR, error });
       toast({
@@ -116,14 +134,21 @@ function AppProvider({ children }: AppProviderProps) {
    * Store auth keys to session storage, continue to verify user after authentication (Auth.tsx).
    */
   const storeAuthKeysAndVerifyUser = useCallback(
-    (authProvider: AuthProvider, tokens: AuthTokens, authUserId: string) => {
+    async (
+      authProvider: AuthProvider,
+      tokens: AuthTokens,
+      authUserId: string
+    ) => {
       sessionStorage.setItem(SESSION_STORAGE_AUTH_PROVIDER, authProvider);
       sessionStorage.setItem(SESSION_STORAGE_AUTH_USER_ID, authUserId);
       JSONSessionStorage.set(SESSION_STORAGE_AUTH_TOKENS, tokens);
       dispatch({ type: ActionTypes.SET_LOADING, loading: true });
-      verifyUser();
+      await verifyUser();
+      await fetchUserConsents();
+      dispatch({ type: ActionTypes.LOG_IN });
+      dispatch({ type: ActionTypes.SET_LOADING, loading: false });
     },
-    [verifyUser]
+    [fetchUserConsents, verifyUser]
   );
 
   /**
@@ -162,11 +187,18 @@ function AppProvider({ children }: AppProviderProps) {
   );
 
   /**
-   * If auth keys provided in session storage, and if token is not expired, log in user.
+   * If auth keys provided in session storage, and if token is not expired, fetch user consents, log in user.
    */
   useEffect(() => {
-    if (validLoginState()) {
+    async function fetchConsentsAndLogIn() {
+      dispatch({ type: ActionTypes.SET_LOADING, loading: true });
+      await fetchUserConsents();
       dispatch({ type: ActionTypes.LOG_IN });
+      dispatch({ type: ActionTypes.SET_LOADING, loading: false });
+    }
+
+    if (validLoginState()) {
+      fetchConsentsAndLogIn();
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

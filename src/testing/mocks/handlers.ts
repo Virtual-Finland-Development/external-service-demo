@@ -48,6 +48,9 @@ export const handlers = [
   rest.get(`${USER_API_BASE_URL}/user`, (req, res, ctx) => {
     return res(ctx.json(mockUser));
   }),
+  rest.get(`${USER_API_BASE_URL}/user/consents`, (req, res, ctx) => {
+    return res(ctx.json({ immigrationDataConsent: true }));
+  }),
   rest.patch(`${USER_API_BASE_URL}/user`, (req, res, ctx) => {
     return res(ctx.json(mockUser));
   }),

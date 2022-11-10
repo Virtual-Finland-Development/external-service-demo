@@ -20,6 +20,7 @@ const axiosInstance = axios.create();
 const USER_API_URLS = [
   `${USER_API_BASE_URL}/identity/verify`,
   `${USER_API_BASE_URL}/user`,
+  `${USER_API_BASE_URL}/user/consents`,
   `${USER_API_BASE_URL}/code-sets/countries`,
   `${USER_API_BASE_URL}/code-sets/occupations`,
   `${USER_API_BASE_URL}/code-sets/languages`,

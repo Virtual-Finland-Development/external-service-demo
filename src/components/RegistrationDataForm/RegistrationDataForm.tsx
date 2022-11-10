@@ -32,6 +32,7 @@ import {
 } from '../../@types';
 
 // context
+import { useAppContext } from '../../context/AppContext/AppContext';
 import { useModal } from '../../context/ModalContext/ModalContext';
 
 // components
@@ -59,19 +60,29 @@ const Divider = () => (
 );
 
 interface Props {
-  profileApiData: Partial<ProfileFormData> | undefined;
-  saveUserConsent: () => void;
+  saveUserConsent: (consent: boolean) => void;
+  fetchUserProfile: () => void;
   lists: {
     countries: CountryOption[];
     occupations: OccupationOption[];
     languages: LanguageOption[];
   };
   isLoading: boolean;
+  isProfileDataUsed: boolean;
 }
 
 export default function RegistrationDataForm(props: Props) {
+  const { userProfile } = useAppContext();
+  const { immigrationDataConsent } = userProfile;
+
   const [isPdfSent, setIsPdfSent] = useState<boolean>(false);
-  const { profileApiData, saveUserConsent, lists, isLoading } = props;
+  const {
+    saveUserConsent,
+    fetchUserProfile,
+    lists,
+    isLoading,
+    isProfileDataUsed,
+  } = props;
   const { openModal, closeModal, setModalCloseDisabled } = useModal();
 
   const { handleSubmit, register, reset, control, watch } =
@@ -91,27 +102,27 @@ export default function RegistrationDataForm(props: Props) {
    * After user have given consent, reset the form with pre-defined values from user profile.
    */
   useEffect(() => {
-    if (profileApiData?.immigrationDataConsent) {
+    if (userProfile?.immigrationDataConsent) {
       reset({
-        ...profileApiData,
-        dateOfBirth: profileApiData.dateOfBirth
-          ? format(parseISO(profileApiData.dateOfBirth), 'yyyy-MM-dd')
+        ...userProfile,
+        dateOfBirth: userProfile.dateOfBirth
+          ? format(parseISO(userProfile.dateOfBirth), 'yyyy-MM-dd')
           : undefined,
-        countryOfBirthCode: profileApiData.countryOfBirthCode
-          ? getCountryValue(lists.countries, profileApiData.countryOfBirthCode)
+        countryOfBirthCode: userProfile.countryOfBirthCode
+          ? getCountryValue(lists.countries, userProfile.countryOfBirthCode)
           : undefined,
-        citizenshipCode: profileApiData.citizenshipCode
-          ? getCountryValue(lists.countries, profileApiData.citizenshipCode)
+        citizenshipCode: userProfile.citizenshipCode
+          ? getCountryValue(lists.countries, userProfile.citizenshipCode)
           : undefined,
-        occupationCode: profileApiData.occupationCode
-          ? getOccupationValue(lists.occupations, profileApiData.occupationCode)
+        occupationCode: userProfile.occupationCode
+          ? getOccupationValue(lists.occupations, userProfile.occupationCode)
           : undefined,
-        nativeLanguageCode: profileApiData.nativeLanguageCode
-          ? getLanguageValue(lists.languages, profileApiData.nativeLanguageCode)
+        nativeLanguageCode: userProfile.nativeLanguageCode
+          ? getLanguageValue(lists.languages, userProfile.nativeLanguageCode)
           : undefined,
       });
     }
-  }, [lists, profileApiData, reset]);
+  }, [lists, userProfile, reset]);
 
   const toast = useToast();
 
@@ -151,31 +162,54 @@ export default function RegistrationDataForm(props: Props) {
   );
 
   /**
-   * Handle user profile data consent ('immigrationDataConsent')
+   * Handle modal open for asking 'immigrationDataConsent', before profile fetch.
+   * If consent already given, user can deny the consent.
    */
-  const handleConsent = useCallback(() => {
+  const handleConsentModalOpen = useCallback(() => {
     openModal({
       title: 'Pre-fill form with your profile',
       content: (
         <Stack spacing={6}>
           <Text>
-            We need your consent to access your profile data in Access to
-            Finland service.
+            {!immigrationDataConsent
+              ? 'We need your consent to access your profile data in Access to Finland service.'
+              : 'You have previously given your consent to access your profile data in Access to Finland Service.'}
           </Text>
-          <Button
-            mt={6}
-            colorScheme="blue"
-            onClick={() => {
-              saveUserConsent();
-              closeModal();
-            }}
-          >
-            Approve
-          </Button>
+          <Stack spacing={6} direction={['column', 'row']}>
+            {immigrationDataConsent && (
+              <Button
+                w="full"
+                onClick={() => {
+                  saveUserConsent(false);
+                  closeModal();
+                }}
+              >
+                Revoke consent
+              </Button>
+            )}
+            <Button
+              colorScheme="blue"
+              w="full"
+              onClick={() => {
+                !immigrationDataConsent
+                  ? saveUserConsent(true)
+                  : fetchUserProfile();
+                closeModal();
+              }}
+            >
+              {!immigrationDataConsent ? 'Approve' : 'Pre-fill'}
+            </Button>
+          </Stack>
         </Stack>
       ),
     });
-  }, [closeModal, openModal, saveUserConsent]);
+  }, [
+    closeModal,
+    fetchUserProfile,
+    immigrationDataConsent,
+    openModal,
+    saveUserConsent,
+  ]);
 
   return (
     <Box>
@@ -204,17 +238,15 @@ export default function RegistrationDataForm(props: Props) {
               <Text>Input information about your registration</Text>
             </Box>
             <Button
-              colorScheme={
-                profileApiData?.immigrationDataConsent ? 'green' : 'blue'
-              }
-              onClick={handleConsent}
+              colorScheme={isProfileDataUsed ? 'green' : 'blue'}
+              onClick={handleConsentModalOpen}
               isLoading={isLoading}
-              disabled={isLoading || profileApiData?.immigrationDataConsent}
-              {...(profileApiData?.immigrationDataConsent && {
+              disabled={isLoading || isProfileDataUsed}
+              {...(isProfileDataUsed && {
                 leftIcon: <CheckIcon />,
               })}
             >
-              {profileApiData?.immigrationDataConsent
+              {isProfileDataUsed
                 ? 'Profile data used'
                 : 'Pre-fill with your profile'}
             </Button>
