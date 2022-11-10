@@ -21,7 +21,7 @@ import api from '../../api';
 export default function Registration() {
   const { setUserProfile } = useAppContext();
 
-  const [profileDataUsed, setProfileDataUsed] = useState<boolean>(false);
+  const [isProfileDataUsed, setProfileDataUsed] = useState<boolean>(false);
   const [profileLoading, setProfileLoading] = useState<boolean>(false);
 
   // User api provided lists and metadata
@@ -116,7 +116,7 @@ export default function Registration() {
           languages,
         }}
         isLoading={profileLoading}
-        profileDataUsed={profileDataUsed}
+        isProfileDataUsed={isProfileDataUsed}
       />
     </Stack>
   );

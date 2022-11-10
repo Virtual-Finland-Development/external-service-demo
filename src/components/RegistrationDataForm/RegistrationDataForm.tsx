@@ -68,7 +68,7 @@ interface Props {
     languages: LanguageOption[];
   };
   isLoading: boolean;
-  profileDataUsed: boolean;
+  isProfileDataUsed: boolean;
 }
 
 export default function RegistrationDataForm(props: Props) {
@@ -81,7 +81,7 @@ export default function RegistrationDataForm(props: Props) {
     fetchUserProfile,
     lists,
     isLoading,
-    profileDataUsed,
+    isProfileDataUsed,
   } = props;
   const { openModal, closeModal, setModalCloseDisabled } = useModal();
 
@@ -184,7 +184,7 @@ export default function RegistrationDataForm(props: Props) {
                   closeModal();
                 }}
               >
-                Deny consent
+                Revoke consent
               </Button>
             )}
             <Button
@@ -238,15 +238,15 @@ export default function RegistrationDataForm(props: Props) {
               <Text>Input information about your registration</Text>
             </Box>
             <Button
-              colorScheme={profileDataUsed ? 'green' : 'blue'}
+              colorScheme={isProfileDataUsed ? 'green' : 'blue'}
               onClick={handleConsentModalOpen}
               isLoading={isLoading}
-              disabled={isLoading || profileDataUsed}
-              {...(profileDataUsed && {
+              disabled={isLoading || isProfileDataUsed}
+              {...(isProfileDataUsed && {
                 leftIcon: <CheckIcon />,
               })}
             >
-              {profileDataUsed
+              {isProfileDataUsed
                 ? 'Profile data used'
                 : 'Pre-fill with your profile'}
             </Button>
