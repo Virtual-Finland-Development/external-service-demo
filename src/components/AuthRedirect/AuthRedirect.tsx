@@ -146,7 +146,7 @@ export default function AuthRedirect() {
           title: 'Error.',
           description: 'Logout request failed.',
           status: 'error',
-          duration: 50000,
+          duration: 5000,
           isClosable: true,
         });
       }
