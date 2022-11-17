@@ -14,6 +14,10 @@ export async function get() {
   return axiosInstance.get(`${USER_API_BASE_URL}/user`);
 }
 
+export async function getConsents() {
+  return axiosInstance.get(`${USER_API_BASE_URL}/user/consents`);
+}
+
 export async function patch(payload: Partial<UserProfile>) {
   return axiosInstance.patch(`${USER_API_BASE_URL}/user`, payload);
 }
