@@ -3,8 +3,6 @@ import {
   waitFor,
   screen,
   act,
-  waitForElementToBeRemoved,
-  fireEvent,
 } from '../../testing/testing-library-utils';
 import userEvent from '@testing-library/user-event';
 import Registration from './Registration';

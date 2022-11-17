@@ -134,7 +134,7 @@ function AppProvider({ children }: AppProviderProps) {
    * Store auth keys to session storage, continue to verify user after authentication (Auth.tsx).
    */
   const storeAuthKeysAndVerifyUser = useCallback(
-    (
+    async (
       authProvider: AuthProvider,
       loggedInState: LoggedInState,
       authUserId: string
