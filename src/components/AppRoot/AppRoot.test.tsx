@@ -1,9 +1,9 @@
+import userEvent from '@testing-library/user-event';
 import {
   customRender1,
   customRender2,
   screen,
 } from '../../testing/testing-library-utils';
-import userEvent from '@testing-library/user-event';
 import AppRoot from './AppRoot';
 
 import * as AppContextExports from '../../context/AppContext/AppContext';
@@ -36,7 +36,7 @@ describe('Authentication based rendering', () => {
 
     // user directed to auth GW login route when login button clicked
     expect(window.location.assign).toBeCalledWith(
-      `${AUTH_GW_BASE_URL}/auth/openid/testbed/login-request?appContext=${appContextUrlEncoded}`
+      `${AUTH_GW_BASE_URL}/auth/openid/testbed/authentication-request?appContext=${appContextUrlEncoded}`
     );
   });
 
@@ -47,7 +47,7 @@ describe('Authentication based rendering', () => {
 
     // user directed to auth GW login route automatically
     expect(window.location.assign).toBeCalledWith(
-      `${AUTH_GW_BASE_URL}/auth/openid/testbed/login-request?appContext=${appContextUrlEncoded}`
+      `${AUTH_GW_BASE_URL}/auth/openid/testbed/authentication-request?appContext=${appContextUrlEncoded}`
     );
   });
 

@@ -6,9 +6,9 @@ import { USER_API_BASE_URL } from './endpoints';
 
 // constants
 import {
+  REQUEST_NOT_AUTHORIZED,
   SESSION_STORAGE_AUTH_PROVIDER,
   SESSION_STORAGE_AUTH_TOKENS,
-  REQUEST_NOT_AUTHORIZED,
 } from '../constants';
 
 // utils
@@ -28,13 +28,13 @@ const USER_API_URLS = [
 
 // Axios request interceptor. Pass token to request Authorization for selected routes, if found.
 axiosInstance.interceptors.request.use(config => {
-  const authTokens = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS);
+  const loggedInState = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS);
 
   if (config.url !== undefined && config.headers !== undefined) {
-    if (authTokens) {
+    if (loggedInState) {
       // pass id token for all user api calls
       if (USER_API_URLS.includes(config.url)) {
-        const idToken = authTokens.idToken;
+        const idToken = loggedInState.idToken;
         config.headers.Authorization = idToken ? `Bearer ${idToken}` : '';
       }
     }
@@ -48,14 +48,14 @@ axiosInstance.interceptors.response.use(
   response => response,
   error => {
     const provider = sessionStorage.getItem(SESSION_STORAGE_AUTH_PROVIDER);
-    const authTokens = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS);
-    const hasExpired = authTokens?.expiresAt
-      ? isPast(parseISO(authTokens.expiresAt))
+    const loggedInState = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS);
+    const hasExpired = loggedInState?.expiresAt
+      ? isPast(parseISO(loggedInState.expiresAt))
       : false;
 
     if (
       provider &&
-      authTokens &&
+      loggedInState &&
       error?.response?.status === 401 &&
       hasExpired
     ) {
