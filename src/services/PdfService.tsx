@@ -88,7 +88,7 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   citizenship.setText(data.citizenshipCode);
 
   addressInFinland.setText(data.addressInFinland);
-  addressAbroad.setText(data.address);
+  addressAbroad.setText(data.addressFormatted);
 
   dateOfArrivalInFinland.setText(
     data.dateOfArrivalInFinland
