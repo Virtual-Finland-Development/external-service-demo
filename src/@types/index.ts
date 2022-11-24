@@ -18,7 +18,12 @@ export interface UserProfile {
   id: string;
   firstName: string;
   lastName: string;
-  address: string;
+  address: {
+    streetAddress: string;
+    zipCode: string;
+    city: string;
+    country: string;
+  };
   jobTitles: string[];
   regions: string[];
   created: string;
@@ -48,6 +53,7 @@ export interface ProfileFormData extends UserProfile {
   endDateOfStayInFinland: string;
   reasonForRecordingInformation: InformationRegistrationReason;
   reasonForRecordingInformationDescription: string;
+  addressFormatted: string;
 }
 
 export enum Sex {

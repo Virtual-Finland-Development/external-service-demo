@@ -29,6 +29,7 @@ import {
   ProfileFormData,
   RegistrationIdentityType,
   Sex,
+  UserProfile,
 } from '../../@types';
 
 // context
@@ -51,6 +52,17 @@ function getOccupationValue(list: OccupationOption[], itemId: string) {
 function getLanguageValue(list: LanguageOption[], itemId: string) {
   if (!list) return undefined;
   return list.find(i => i.id === itemId)?.englishName || undefined;
+}
+
+function formatAddress(addressObject: UserProfile['address']) {
+  const { streetAddress, zipCode, city, country } = addressObject;
+  let output = '';
+
+  if (streetAddress) output = `${streetAddress}`;
+  if (city) output += `, ${city}`;
+  if (zipCode) output += ` ${zipCode}`;
+
+  return output;
 }
 
 const Divider = () => (
@@ -119,6 +131,9 @@ export default function RegistrationDataForm(props: Props) {
           : undefined,
         nativeLanguageCode: userProfile.nativeLanguageCode
           ? getLanguageValue(lists.languages, userProfile.nativeLanguageCode)
+          : undefined,
+        addressFormatted: userProfile.address
+          ? formatAddress(userProfile.address)
           : undefined,
       });
     }
@@ -394,9 +409,9 @@ export default function RegistrationDataForm(props: Props) {
                     <Input {...register('addressInFinland')} />
                   </FormControl>
 
-                  <FormControl id="address">
+                  <FormControl id="addressFormatted">
                     <FormLabel>Address abroad</FormLabel>
-                    <Input {...register('address')} />
+                    <Input {...register('addressFormatted')} />
                   </FormControl>
 
                   <Divider />
