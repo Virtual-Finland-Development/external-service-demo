@@ -61,7 +61,6 @@ function formatAddress(addressObject: UserProfile['address']) {
   if (streetAddress) output = `${streetAddress}`;
   if (city) output += `, ${city}`;
   if (zipCode) output += ` ${zipCode}`;
-  if (country) output += `, ${country}`;
 
   return output;
 }
