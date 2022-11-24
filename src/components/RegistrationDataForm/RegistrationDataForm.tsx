@@ -55,7 +55,7 @@ function getLanguageValue(list: LanguageOption[], itemId: string) {
 }
 
 function formatAddress(addressObject: UserProfile['address']) {
-  const { streetAddress, zipCode, city, country } = addressObject;
+  const { streetAddress, zipCode, city } = addressObject;
   let output = '';
 
   if (streetAddress) output = `${streetAddress}`;
