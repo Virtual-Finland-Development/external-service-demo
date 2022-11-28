@@ -1,7 +1,11 @@
 import { rest } from 'msw';
 
 // endpoints
-import { AUTH_GW_BASE_URL, USER_API_BASE_URL } from '../../api/endpoints';
+import {
+  AUTH_GW_BASE_URL,
+  USER_API_BASE_URL,
+  TESTBED_API_BASE_URL,
+} from '../../api/endpoints';
 
 const mockAuthUser = {
   idToken: 'test-token',
@@ -59,9 +63,12 @@ export const handlers = [
       })
     );
   }),
-  rest.get(`${USER_API_BASE_URL}/user`, (req, res, ctx) => {
-    return res(ctx.json(mockUser));
-  }),
+  rest.post(
+    `${TESTBED_API_BASE_URL}/testbed/productizers/user-profile`,
+    (req, res, ctx) => {
+      return res(ctx.json(mockUser));
+    }
+  ),
   rest.get(`${USER_API_BASE_URL}/user/consents`, (req, res, ctx) => {
     return res(ctx.json({ immigrationDataConsent: true }));
   }),
