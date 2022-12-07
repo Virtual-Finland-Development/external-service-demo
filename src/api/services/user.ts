@@ -4,14 +4,17 @@ import axiosInstance from '../axiosInstance';
 import { UserProfile } from '../../@types';
 
 // endpoints
-import { USER_API_BASE_URL } from '../endpoints';
+import { USER_API_BASE_URL, TESTBED_API_BASE_URL } from '../endpoints';
 
 export async function verify() {
   return axiosInstance.get(`${USER_API_BASE_URL}/identity/verify`);
 }
 
+// testbed-api / productizer call
 export async function get() {
-  return axiosInstance.get(`${USER_API_BASE_URL}/user`);
+  return axiosInstance.post(
+    `${TESTBED_API_BASE_URL}/testbed/productizers/user-profile`
+  );
 }
 
 export async function getConsents() {

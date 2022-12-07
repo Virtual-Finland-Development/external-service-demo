@@ -2,7 +2,7 @@ import axios from 'axios';
 import { isPast, parseISO } from 'date-fns';
 
 // endpoints
-import { USER_API_BASE_URL } from './endpoints';
+import { USER_API_BASE_URL, TESTBED_API_BASE_URL } from './endpoints';
 
 // constants
 import {
@@ -26,6 +26,10 @@ const USER_API_URLS = [
   `${USER_API_BASE_URL}/code-sets/languages`,
 ];
 
+const TESTBED_API_URLS = [
+  `${TESTBED_API_BASE_URL}/testbed/productizers/user-profile`,
+];
+
 // Axios request interceptor. Pass token to request Authorization for selected routes, if found.
 axiosInstance.interceptors.request.use(config => {
   const loggedInState = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS);
@@ -33,7 +37,7 @@ axiosInstance.interceptors.request.use(config => {
   if (config.url !== undefined && config.headers !== undefined) {
     if (loggedInState) {
       // pass id token for all user api calls
-      if (USER_API_URLS.includes(config.url)) {
+      if ([...USER_API_URLS, ...TESTBED_API_URLS].includes(config.url)) {
         const idToken = loggedInState.idToken;
         config.headers.Authorization = idToken ? `Bearer ${idToken}` : '';
       }
