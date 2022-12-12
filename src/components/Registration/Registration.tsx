@@ -44,7 +44,7 @@ export default function Registration() {
     try {
       await api.user.patch({ immigrationDataConsent });
       const userProfileResponse = await api.user.get();
-      setUserProfile(userProfileResponse.data);
+      setUserProfile({ ...userProfileResponse.data, immigrationDataConsent });
 
       if (immigrationDataConsent) {
         setProfileDataUsed(true);
