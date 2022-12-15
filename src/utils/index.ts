@@ -6,6 +6,9 @@ export const JSONSessionStorage = {
   set(key: string, value: any) {
     sessionStorage.setItem(key, JSON.stringify(value));
   },
+  clear() {
+    sessionStorage.clear();
+  },
 };
 
 // Helper function to remove trailing slashes from string
