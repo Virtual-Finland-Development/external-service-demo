@@ -43,6 +43,10 @@ export function directToAuthGwLogin(authProvider: AuthProvider) {
 export function directToAuthGwLogout(authProvider: AuthProvider) {
   const authRoute = getAuthRoute(authProvider);
   const idToken = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS).idToken;
+
+  // Clear local state before emitting a logout request
+  JSONSessionStorage.clear();
+
   window.location.assign(
     `${AUTH_GW_BASE_URL}/auth/${authRoute}/${authProvider}/logout-request?appContext=${appContextUrlEncoded}&idToken=${idToken}`
   );
