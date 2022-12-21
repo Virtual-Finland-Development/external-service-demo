@@ -31,7 +31,7 @@ export function getCountries() {
 }
 
 export function getOccupations() {
-  return axiosInstance.get(`${USERS_API_BASE_URL}/code-sets/occupations`);
+  return axiosInstance.get(`${USERS_API_BASE_URL}/code-sets/occupations-flat`);
 }
 
 export function getLanguages() {

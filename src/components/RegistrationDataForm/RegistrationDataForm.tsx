@@ -46,7 +46,7 @@ function getCountryValue(list: CountryOption[], itemId: string) {
 
 function getOccupationValue(list: OccupationOption[], itemId: string) {
   if (!list) return undefined;
-  return list.find(i => i.id === itemId)?.name.en || undefined;
+  return list.find(i => i.notation === itemId)?.prefLabel.en || undefined;
 }
 
 function getLanguageValue(list: LanguageOption[], itemId: string) {
