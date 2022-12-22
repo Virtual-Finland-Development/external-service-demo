@@ -82,8 +82,8 @@ export interface CountryOption {
 }
 
 export interface OccupationOption {
-  id: string;
-  name: {
+  notation: string;
+  prefLabel: {
     en: string;
   };
 }
