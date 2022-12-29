@@ -104,3 +104,9 @@ jobs:
       - name: Run Pulumi deployment
         working-directory: ./infra
         run: pulumi up -y
+      - name: Tag the deployment
+        uses: Virtual-Finland-Development/automatic-release-action@v1.0
+        if: ${{ inputs.environment == 'staging' }}
+        with:
+          environment: ${{ inputs.environment }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
