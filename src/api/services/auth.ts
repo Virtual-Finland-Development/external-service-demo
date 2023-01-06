@@ -13,7 +13,7 @@ import {
 } from '../../constants';
 
 // utils
-import { JSONSessionStorage } from '../../utils';
+import { JSONSessionStorage } from '../../utils/JSONStorage';
 
 function getAuthRoute(authProvider: AuthProvider) {
   let route = '';
