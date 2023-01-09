@@ -22,7 +22,7 @@ export async function checkConsent(
   dataSourceUri: string,
   consentToken?: string | null
 ): Promise<ConsentSituation> {
-  const idToken = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS).idToken;
+  const idToken = JSONSessionStorage.get(SESSION_STORAGE_AUTH_TOKENS)?.idToken;
 
   const response = await axios.post(
     `${AUTH_GW_BASE_URL}/consents/testbed/consent-check`,
