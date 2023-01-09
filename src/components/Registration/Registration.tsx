@@ -1,25 +1,37 @@
-import { useState } from 'react';
-import { Flex, Stack } from '@chakra-ui/react';
-import { useToast } from '@chakra-ui/react';
+import { Flex, Stack, useToast } from '@chakra-ui/react';
+import { useContext, useState } from 'react';
 
 // context
 import { useAppContext } from '../../context/AppContext/AppContext';
 
 // hooks
 import useCountries from '../../hooks/useCountries';
-import useOccupations from '../../hooks/useOccupations';
 import useLanguages from '../../hooks/useLanguages';
+import useOccupations from '../../hooks/useOccupations';
 
 // components
-import RegistrationDataForm from '../RegistrationDataForm/RegistrationDataForm';
-import Loading from '../Loading/Loading';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import Loading from '../Loading/Loading';
+import RegistrationDataForm from '../RegistrationDataForm/RegistrationDataForm';
 
 // api
 import api from '../../api';
 
+// consent context
+import { ConsentDataSource } from '../../constants/ConsentDataSource';
+import getConsentContext from '../../context/ConsentContext/ConsentContext';
+
+// Get context and provider for given data source
+const { ConsentContext } = getConsentContext(ConsentDataSource.USER_PROFILE);
+
 export default function Registration() {
   const { setUserProfile } = useAppContext();
+  const {
+    isConsentInitialized,
+    isConsentGranted,
+    redirectToConsentService,
+    consentSituation,
+  } = useContext(ConsentContext);
 
   const [isProfileDataUsed, setProfileDataUsed] = useState<boolean>(false);
   const [profileLoading, setProfileLoading] = useState<boolean>(false);
@@ -30,38 +42,12 @@ export default function Registration() {
   const { data: languages, isLoading: languagesLoading } = useLanguages();
 
   const listsLoading =
-    countriesLoading || occupationsLoading || languagesLoading;
+    countriesLoading ||
+    occupationsLoading ||
+    languagesLoading ||
+    !isConsentInitialized;
 
   const toast = useToast();
-
-  /**
-   * Save user immigrationDataConsent.
-   * Response returns full user profile to be used to pre-fill RegistrationDataForm
-   */
-  const saveUserConsent = async (immigrationDataConsent: boolean) => {
-    setProfileLoading(true);
-
-    try {
-      await api.user.patch({ immigrationDataConsent });
-      const userProfileResponse = await api.user.get();
-      setUserProfile({ ...userProfileResponse.data, immigrationDataConsent });
-
-      if (immigrationDataConsent) {
-        setProfileDataUsed(true);
-      }
-    } catch (error: any) {
-      toast({
-        title: 'Error.',
-        description:
-          error?.message || 'Something went wrong, please try again later.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setProfileLoading(false);
-    }
-  };
 
   /**
    * Fetch user profile.
@@ -71,7 +57,7 @@ export default function Registration() {
     setProfileLoading(true);
 
     try {
-      const response = await api.user.get();
+      const response = await api.user.get(consentSituation.consentToken);
       setUserProfile(response.data);
       setProfileDataUsed(true);
     } catch (error: any) {
@@ -109,7 +95,6 @@ export default function Registration() {
   return (
     <Stack alignItems="center">
       <RegistrationDataForm
-        saveUserConsent={saveUserConsent}
         fetchUserProfile={fetchUserProfile}
         lists={{
           countries,
@@ -118,6 +103,8 @@ export default function Registration() {
         }}
         isLoading={profileLoading}
         isProfileDataUsed={isProfileDataUsed}
+        isConsentGranted={isConsentGranted}
+        redirectToConsentService={redirectToConsentService}
       />
     </Stack>
   );
