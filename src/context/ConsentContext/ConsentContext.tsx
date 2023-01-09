@@ -101,7 +101,20 @@ function getConsentProvider(
     // External service calls
     //
     async function fetchCurrentConsentSituation() {
-      const responseSituation = await api.consent.checkConsent(dataSource);
+      const consentStoreKey = `consent_${dataSource}`;
+
+      const storedConsentToken = sessionStorage.getItem(consentStoreKey);
+      const responseSituation = await api.consent.checkConsent(
+        dataSource,
+        storedConsentToken
+      );
+
+      if (responseSituation.consentToken) {
+        sessionStorage.setItem(consentStoreKey, responseSituation.consentToken);
+      } else if (storedConsentToken) {
+        sessionStorage.removeItem(consentStoreKey);
+      }
+
       setConsentSituation(responseSituation);
       setIsConsentGranted(responseSituation.consentStatus === 'consentGranted');
     }
