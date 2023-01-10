@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { AppContextObj } from '../@types';
-import { baseAppContext } from '../constants';
+import { baseAppContextObj } from '../constants';
 
 // Helper function to remove trailing slashes from string
 export function removeTrailingSlash(str: string) {
@@ -31,7 +31,7 @@ export function generateAppContextHash(
 ) {
   const appContextBase64 = Buffer.from(
     JSON.stringify({
-      ...baseAppContext,
+      ...baseAppContextObj,
       ...(applicationContextObj || {}),
     })
   ).toString('base64');

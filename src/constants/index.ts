@@ -1,5 +1,4 @@
 import { AppContextObj } from '../@types';
-import { generateAppContextHash } from '../utils';
 
 // local storage
 export const SESSION_STORAGE_AUTH_PROVIDER = 'esd-auth-provider';
@@ -20,11 +19,10 @@ export const APP_BASE_URL = (() => {
   }
 })();
 
-// appContext
-export const baseAppContext: AppContextObj = {
+// base for appContext hash
+export const baseAppContextObj: AppContextObj = {
   appName: 'register-foreigner-information',
   redirectUrl: `${APP_BASE_URL}/auth-redirect`,
 };
-export const appContextUrlEncoded = generateAppContextHash(baseAppContext);
 
 export const REQUEST_NOT_AUTHORIZED = 'esd-request-not-authrorized';
