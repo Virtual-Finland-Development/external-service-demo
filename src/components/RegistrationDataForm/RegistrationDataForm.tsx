@@ -109,7 +109,7 @@ export default function RegistrationDataForm(props: Props) {
    * After user have given consent, reset the form with pre-defined values from user profile.
    */
   useEffect(() => {
-    if (userProfile?.immigrationDataConsent) {
+    if (isConsentGranted && userProfile) {
       reset({
         ...userProfile,
         dateOfBirth: userProfile.dateOfBirth
@@ -132,7 +132,7 @@ export default function RegistrationDataForm(props: Props) {
           : undefined,
       });
     }
-  }, [lists, userProfile, reset]);
+  }, [lists, isConsentGranted, userProfile, reset]);
 
   const toast = useToast();
 
