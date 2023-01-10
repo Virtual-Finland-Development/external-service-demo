@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { ConsentDataSource } from '../../constants/ConsentDataSource';
-import getConsentContext from '../../context/ConsentContext/ConsentContext';
+import { getConsentContext } from '../../context/ConsentContext/ConsentContext';
 import {
   act,
   customRender1,

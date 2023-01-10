@@ -19,7 +19,7 @@ import api from '../../api';
 
 // consent context
 import { ConsentDataSource } from '../../constants/ConsentDataSource';
-import getConsentContext from '../../context/ConsentContext/ConsentContext';
+import { getConsentContext } from '../../context/ConsentContext/ConsentContext';
 
 // Get context and provider for given data source
 const { ConsentContext } = getConsentContext(ConsentDataSource.USER_PROFILE);
