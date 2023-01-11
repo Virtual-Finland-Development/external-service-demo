@@ -189,9 +189,16 @@ export default function RegistrationDataForm(props: Props) {
             {isConsentGranted && (
               <Button
                 w="full"
+                colorScheme="red"
+                variant="outline"
                 onClick={() => {
-                  redirectToConsentService();
-                  closeModal();
+                  toast({
+                    title: 'Warning',
+                    description: 'Consent revoke not implemented yet',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                  });
                 }}
               >
                 Revoke consent
@@ -214,6 +221,7 @@ export default function RegistrationDataForm(props: Props) {
       ),
     });
   }, [
+    toast,
     closeModal,
     fetchUserProfile,
     isConsentGranted,
