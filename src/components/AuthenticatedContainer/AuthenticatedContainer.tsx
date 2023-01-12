@@ -1,6 +1,6 @@
 import { Container } from '@chakra-ui/react';
 import { ConsentDataSource } from '../../constants/ConsentDataSource';
-import { getConsentContext } from '../../context/ConsentContext/ConsentContext';
+import { getConsentContext } from '../../context/ConsentContext/ConsentContextFactory';
 
 // components
 import NavBar from '../NavBar/NavBar';
