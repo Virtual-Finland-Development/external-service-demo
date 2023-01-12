@@ -22,7 +22,7 @@ import {
 } from '../../constants';
 
 // utils
-import { JSONSessionStorage } from '../../utils';
+import { JSONSessionStorage } from '../../utils/JSONStorage';
 
 // reducers
 import {

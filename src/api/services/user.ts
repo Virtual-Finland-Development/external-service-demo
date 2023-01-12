@@ -4,16 +4,25 @@ import axiosInstance from '../axiosInstance';
 import { UserProfile } from '../../@types';
 
 // endpoints
-import { USERS_API_BASE_URL, TESTBED_API_BASE_URL } from '../endpoints';
+import { TESTBED_API_BASE_URL, USERS_API_BASE_URL } from '../endpoints';
 
 export async function verify() {
   return axiosInstance.get(`${USERS_API_BASE_URL}/identity/verify`);
 }
 
 // testbed-api / productizer call
-export async function get() {
+export async function get(consentToken?: string) {
+  if (!consentToken) {
+    throw new Error('Consent token is required');
+  }
   return axiosInstance.post(
-    `${TESTBED_API_BASE_URL}/testbed/productizers/user-profile`
+    `${TESTBED_API_BASE_URL}/testbed/productizers/user-profile`,
+    null,
+    {
+      headers: {
+        'X-Consent-Token': consentToken,
+      },
+    }
   );
 }
 

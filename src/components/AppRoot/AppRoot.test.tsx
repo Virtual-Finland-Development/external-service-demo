@@ -10,9 +10,7 @@ import * as AppContextExports from '../../context/AppContext/AppContext';
 
 // endpoints
 import { AUTH_GW_BASE_URL } from '../../api/endpoints';
-
-// constants
-import { appContextUrlEncoded } from '../../constants';
+import { generateAppContextHash } from '../../utils';
 
 describe('Authentication based rendering', () => {
   beforeEach(() => {
@@ -36,7 +34,7 @@ describe('Authentication based rendering', () => {
 
     // user directed to auth GW login route when login button clicked
     expect(window.location.assign).toBeCalledWith(
-      `${AUTH_GW_BASE_URL}/auth/openid/testbed/authentication-request?appContext=${appContextUrlEncoded}`
+      `${AUTH_GW_BASE_URL}/auth/openid/testbed/authentication-request?appContext=${generateAppContextHash()}`
     );
   });
 
@@ -47,7 +45,7 @@ describe('Authentication based rendering', () => {
 
     // user directed to auth GW login route automatically
     expect(window.location.assign).toBeCalledWith(
-      `${AUTH_GW_BASE_URL}/auth/openid/testbed/authentication-request?appContext=${appContextUrlEncoded}`
+      `${AUTH_GW_BASE_URL}/auth/openid/testbed/authentication-request?appContext=${generateAppContextHash()}`
     );
   });
 

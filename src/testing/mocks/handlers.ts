@@ -3,9 +3,10 @@ import { rest } from 'msw';
 // endpoints
 import {
   AUTH_GW_BASE_URL,
-  USERS_API_BASE_URL,
   TESTBED_API_BASE_URL,
+  USERS_API_BASE_URL,
 } from '../../api/endpoints';
+import { ConsentDataSource } from '../../constants/ConsentDataSource';
 
 const mockAuthUser = {
   idToken: 'test-token',
@@ -52,6 +53,29 @@ export const handlers = [
           sub: '1231232asdasdADasd2',
         })
       );
+    }
+  ),
+  rest.post(
+    `${AUTH_GW_BASE_URL}/consents/testbed/consent-check`,
+    async (req, res, ctx) => {
+      const { dataSources } = await req.json();
+      const consentToken = dataSources[0].consentToken;
+      const result = consentToken
+        ? [
+            {
+              dataSource: ConsentDataSource.USER_PROFILE,
+              consentStatus: 'consentGranted',
+              consentToken: consentToken,
+            },
+          ]
+        : [
+            {
+              dataSource: ConsentDataSource.USER_PROFILE,
+              consentStatus: 'verifyConsent',
+              redirectUrl: 'skip-redirect-url',
+            },
+          ];
+      return res(ctx.json(result));
     }
   ),
   rest.get(`${USERS_API_BASE_URL}/identity/verify`, (req, res, ctx) => {
