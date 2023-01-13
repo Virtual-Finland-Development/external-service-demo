@@ -230,9 +230,13 @@ export default function RegistrationDataForm(props: Props) {
               colorScheme="blue"
               w="full"
               onClick={() => {
-                !isConsentGranted
-                  ? redirectToConsentService()
-                  : fetchUserProfile();
+                if (!isConsentGranted) {
+                  redirectToConsentService();
+                  sessionStorage.setItem('consentInitializedWithinApp', 'true');
+                } else {
+                  fetchUserProfile();
+                }
+
                 closeModal();
               }}
             >
