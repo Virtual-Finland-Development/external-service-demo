@@ -84,7 +84,7 @@ export async function createPdfFrom(bytes: ArrayBuffer, data: ProfileFormData) {
   districtOfOrigin.setText(data.districtOfOrigin);
 
   nativeLanguage.setText(data.nativeLanguageCode);
-  occupation.setText(data.occupationCode);
+  occupation.setText(data.occupationsString);
   citizenship.setText(data.citizenshipCode);
 
   addressInFinland.setText(data.addressInFinland);

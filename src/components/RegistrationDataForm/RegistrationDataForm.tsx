@@ -25,6 +25,7 @@ import {
   CountryOption,
   InformationRegistrationReason,
   LanguageOption,
+  Occupation,
   OccupationOption,
   ProfileFormData,
   RegistrationIdentityType,
@@ -44,9 +45,19 @@ function getCountryValue(list: CountryOption[], itemId: string) {
   return list.find(i => i.id === itemId)?.englishName || undefined;
 }
 
-function getOccupationValue(list: OccupationOption[], itemId: string) {
-  if (!list) return undefined;
-  return list.find(i => i.notation === itemId)?.prefLabel.en || undefined;
+function getOccupationsValues(
+  list: OccupationOption[],
+  userOccupations: Occupation[]
+) {
+  if (!list || !userOccupations) return undefined;
+
+  return userOccupations
+    .map(o => {
+      const label =
+        list.find(i => i.uri === o.escoIdentifier)?.prefLabel.en || '';
+      return label;
+    })
+    .join(', ');
 }
 
 function getLanguageValue(list: LanguageOption[], itemId: string) {
@@ -121,8 +132,8 @@ export default function RegistrationDataForm(props: Props) {
         citizenshipCode: userProfile.citizenshipCode
           ? getCountryValue(lists.countries, userProfile.citizenshipCode)
           : undefined,
-        occupationCode: userProfile.occupationCode
-          ? getOccupationValue(lists.occupations, userProfile.occupationCode)
+        occupationsString: userProfile.occupations
+          ? getOccupationsValues(lists.occupations, userProfile.occupations)
           : undefined,
         nativeLanguageCode: userProfile.nativeLanguageCode
           ? getLanguageValue(lists.languages, userProfile.nativeLanguageCode)
@@ -334,8 +345,8 @@ export default function RegistrationDataForm(props: Props) {
                               defaultValue={Sex.Male}
                             >
                               <Stack direction="row">
-                                <Radio value="male">Male</Radio>
-                                <Radio value="female">Female</Radio>
+                                <Radio value="Male">Male</Radio>
+                                <Radio value="Female">Female</Radio>
                               </Stack>
                             </RadioGroup>
                           )}
@@ -395,9 +406,9 @@ export default function RegistrationDataForm(props: Props) {
                       <FormLabel>Native language</FormLabel>
                       <Input {...register('nativeLanguageCode')} />
                     </FormControl>
-                    <FormControl id="occupationCode">
+                    <FormControl id="occupationsString">
                       <FormLabel>Occupation</FormLabel>
-                      <Input {...register('occupationCode')} />
+                      <Input {...register('occupationsString')} />
                     </FormControl>
                     <FormControl id="citizenshipCode">
                       <FormLabel>Citizenship</FormLabel>

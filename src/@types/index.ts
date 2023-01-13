@@ -22,6 +22,13 @@ export type LoggedInState = {
   };
 };
 
+export interface Occupation {
+  escoCode: string;
+  escoIdentifier: string;
+  naceCode: string | null;
+  workExperience: number | null;
+}
+
 export interface UserProfile {
   id: string;
   firstName: string;
@@ -44,6 +51,7 @@ export interface UserProfile {
   gender: string;
   dateOfBirth: string;
   immigrationDataConsent: boolean;
+  occupations: Occupation[];
 }
 
 export interface ProfileFormData extends UserProfile {
@@ -62,6 +70,7 @@ export interface ProfileFormData extends UserProfile {
   reasonForRecordingInformation: InformationRegistrationReason;
   reasonForRecordingInformationDescription: string;
   addressFormatted: string;
+  occupationsString: string;
 }
 
 export enum Sex {
@@ -94,6 +103,7 @@ export interface OccupationOption {
   prefLabel: {
     en: string;
   };
+  uri: string;
 }
 
 export interface LanguageOption {
