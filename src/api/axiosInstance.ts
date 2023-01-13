@@ -2,7 +2,7 @@ import axios from 'axios';
 import { isPast, parseISO } from 'date-fns';
 
 // endpoints
-import { USERS_API_BASE_URL, TESTBED_API_BASE_URL } from './endpoints';
+import { TESTBED_API_BASE_URL, USERS_API_BASE_URL } from './endpoints';
 
 // constants
 import {
@@ -12,7 +12,7 @@ import {
 } from '../constants';
 
 // utils
-import { JSONSessionStorage } from '../utils';
+import { JSONSessionStorage } from '../utils/JSONStorage';
 
 // Create axios instance for api services
 const axiosInstance = axios.create();

@@ -12,15 +12,13 @@ import { AuthProvider } from '../../@types';
 // context
 import { useAppContext } from '../../context/AppContext/AppContext';
 
-// constants
-import { appContextUrlEncoded } from '../../constants';
-
 // components
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Loading from '../Loading/Loading';
 
 // api
 import api from '../../api';
+import { generateAppContextHash } from '../../utils';
 
 export default function AuthRedirect() {
   const { storeAuthKeysAndVerifyUser, logOut } = useAppContext();
@@ -66,7 +64,7 @@ export default function AuthRedirect() {
         const loggedInState = await api.auth.logIn(
           {
             loginCode: loginCodeParam as string,
-            appContext: appContextUrlEncoded,
+            appContext: generateAppContextHash(),
           },
           authProvider
         );

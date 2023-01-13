@@ -1,6 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { format, parseISO } from 'date-fns';
+import { CheckCircleIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -18,7 +16,9 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import { CheckCircleIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons';
+import { format, parseISO } from 'date-fns';
+import { useCallback, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 // types
 import {
@@ -83,7 +83,6 @@ const Divider = () => (
 );
 
 interface Props {
-  saveUserConsent: (consent: boolean) => void;
   fetchUserProfile: () => void;
   lists: {
     countries: CountryOption[];
@@ -92,20 +91,18 @@ interface Props {
   };
   isLoading: boolean;
   isProfileDataUsed: boolean;
+  isConsentGranted: boolean;
+  redirectToConsentService: () => void;
+  freshApprovedConsent: boolean;
 }
 
 export default function RegistrationDataForm(props: Props) {
   const { userProfile } = useAppContext();
-  const { immigrationDataConsent } = userProfile;
+  const { isConsentGranted, redirectToConsentService, freshApprovedConsent } =
+    props;
 
   const [isPdfSent, setIsPdfSent] = useState<boolean>(false);
-  const {
-    saveUserConsent,
-    fetchUserProfile,
-    lists,
-    isLoading,
-    isProfileDataUsed,
-  } = props;
+  const { fetchUserProfile, lists, isLoading, isProfileDataUsed } = props;
   const { openModal, closeModal, setModalCloseDisabled } = useModal();
 
   const { handleSubmit, register, reset, control, watch } =
@@ -122,10 +119,19 @@ export default function RegistrationDataForm(props: Props) {
   const { reasonForRecordingInformation } = watch();
 
   /**
+   * Fetch profile automatically once user has given consent and is redirected back to the app
+   */
+  useEffect(() => {
+    if (freshApprovedConsent) {
+      fetchUserProfile();
+    }
+  }, [fetchUserProfile, freshApprovedConsent]);
+
+  /**
    * After user have given consent, reset the form with pre-defined values from user profile.
    */
   useEffect(() => {
-    if (userProfile?.immigrationDataConsent) {
+    if (isConsentGranted && userProfile) {
       reset({
         ...userProfile,
         dateOfBirth: userProfile.dateOfBirth
@@ -148,7 +154,7 @@ export default function RegistrationDataForm(props: Props) {
           : undefined,
       });
     }
-  }, [lists, userProfile, reset]);
+  }, [lists, isConsentGranted, userProfile, reset]);
 
   const toast = useToast();
 
@@ -197,17 +203,24 @@ export default function RegistrationDataForm(props: Props) {
       content: (
         <Stack spacing={6}>
           <Text>
-            {!immigrationDataConsent
+            {!isConsentGranted
               ? 'We need your consent to access your profile data in Access to Finland service.'
               : 'You have previously given your consent to access your profile data in Access to Finland Service.'}
           </Text>
           <Stack spacing={6} direction={['column', 'row']}>
-            {immigrationDataConsent && (
+            {isConsentGranted && (
               <Button
                 w="full"
+                colorScheme="red"
+                variant="outline"
                 onClick={() => {
-                  saveUserConsent(false);
-                  closeModal();
+                  toast({
+                    title: 'Warning',
+                    description: 'Consent revoke not implemented yet',
+                    status: 'warning',
+                    duration: 5000,
+                    isClosable: true,
+                  });
                 }}
               >
                 Revoke consent
@@ -217,24 +230,25 @@ export default function RegistrationDataForm(props: Props) {
               colorScheme="blue"
               w="full"
               onClick={() => {
-                !immigrationDataConsent
-                  ? saveUserConsent(true)
+                !isConsentGranted
+                  ? redirectToConsentService()
                   : fetchUserProfile();
                 closeModal();
               }}
             >
-              {!immigrationDataConsent ? 'Approve' : 'Pre-fill'}
+              {!isConsentGranted ? 'Approve' : 'Pre-fill'}
             </Button>
           </Stack>
         </Stack>
       ),
     });
   }, [
+    toast,
     closeModal,
     fetchUserProfile,
-    immigrationDataConsent,
+    isConsentGranted,
     openModal,
-    saveUserConsent,
+    redirectToConsentService,
   ]);
 
   return (

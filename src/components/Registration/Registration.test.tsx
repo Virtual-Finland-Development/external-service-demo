@@ -1,15 +1,33 @@
-import {
-  customRender1,
-  waitFor,
-  screen,
-  act,
-} from '../../testing/testing-library-utils';
 import userEvent from '@testing-library/user-event';
+import { ConsentDataSource } from '../../constants/ConsentDataSource';
+import { getConsentContext } from '../../context/ConsentContext/ConsentContextFactory';
+import {
+  act,
+  customRender1,
+  screen,
+  waitFor,
+} from '../../testing/testing-library-utils';
 import Registration from './Registration';
+const { ConsentProvider } = getConsentContext(ConsentDataSource.USER_PROFILE);
 
 describe('<Registration />', () => {
-  test('User gives consent, profile is fetched and form pre-filled with user data', async () => {
-    customRender1(<Registration />);
+  // Mock window.location.assign
+  let location: Location;
+  beforeEach(() => {
+    location = window.location;
+    window.location.assign = jest.fn();
+  });
+  afterEach(() => {
+    window.location = location;
+    sessionStorage.clear();
+  });
+
+  test('No user profile consebt given, user sees an approve button', async () => {
+    customRender1(
+      <ConsentProvider>
+        <Registration />
+      </ConsentProvider>
+    );
 
     const consentButton = await screen.findByRole('button', {
       name: /pre-fill with your profile/i,
@@ -22,8 +40,31 @@ describe('<Registration />', () => {
       name: /approve/i,
     });
     expect(approveButton).toBeInTheDocument();
+  });
 
-    userEvent.click(approveButton);
+  test('User has given consent, profile is fetched and form pre-filled with user data', async () => {
+    // Mock consent granted situation
+    sessionStorage.setItem('consent-USER_PROFILE', 'some-consent-token');
+
+    customRender1(
+      <ConsentProvider>
+        <Registration />
+      </ConsentProvider>
+    );
+
+    const consentButton = await screen.findByRole('button', {
+      name: /pre-fill with your profile/i,
+    });
+    expect(consentButton).toBeInTheDocument();
+
+    userEvent.click(consentButton);
+
+    const prefillButton = await screen.findByRole('button', {
+      name: /Pre-fill/i,
+    });
+    expect(prefillButton).toBeInTheDocument();
+
+    userEvent.click(prefillButton);
 
     const firstNameInput = screen.getByLabelText('Given names');
     const lastNameInput = screen.getByLabelText('Family name');
@@ -36,7 +77,11 @@ describe('<Registration />', () => {
   });
 
   test('User opens form preview, sends the form, form has been sent.', async () => {
-    customRender1(<Registration />);
+    customRender1(
+      <ConsentProvider>
+        <Registration />
+      </ConsentProvider>
+    );
 
     // use fake timers (setTimout calls)
     jest.useFakeTimers();
