@@ -93,11 +93,13 @@ interface Props {
   isProfileDataUsed: boolean;
   isConsentGranted: boolean;
   redirectToConsentService: () => void;
+  freshApprovedConsent: boolean;
 }
 
 export default function RegistrationDataForm(props: Props) {
   const { userProfile } = useAppContext();
-  const { isConsentGranted, redirectToConsentService } = props;
+  const { isConsentGranted, redirectToConsentService, freshApprovedConsent } =
+    props;
 
   const [isPdfSent, setIsPdfSent] = useState<boolean>(false);
   const { fetchUserProfile, lists, isLoading, isProfileDataUsed } = props;
@@ -115,6 +117,15 @@ export default function RegistrationDataForm(props: Props) {
     });
 
   const { reasonForRecordingInformation } = watch();
+
+  /**
+   * Fetch profile automatically once user has given consent and is redirected back to the app
+   */
+  useEffect(() => {
+    if (freshApprovedConsent) {
+      fetchUserProfile();
+    }
+  }, [fetchUserProfile, freshApprovedConsent]);
 
   /**
    * After user have given consent, reset the form with pre-defined values from user profile.

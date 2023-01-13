@@ -1,5 +1,5 @@
 import { Flex, Stack, useToast } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 // context
 import { useAppContext } from '../../context/AppContext/AppContext';
@@ -31,6 +31,7 @@ export default function Registration() {
     isConsentGranted,
     redirectToConsentService,
     consentSituation,
+    freshApprovedConsent,
   } = useContext(ConsentContext);
 
   const [isProfileDataUsed, setProfileDataUsed] = useState<boolean>(false);
@@ -53,7 +54,7 @@ export default function Registration() {
    * Fetch user profile.
    * User has given immigrationDataConsent already, profile can be fetched.
    */
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     setProfileLoading(true);
 
     try {
@@ -72,7 +73,7 @@ export default function Registration() {
     } finally {
       setProfileLoading(false);
     }
-  };
+  }, [consentSituation.consentToken, setUserProfile, toast]);
 
   if (listsLoading) {
     return (
@@ -105,6 +106,7 @@ export default function Registration() {
         isProfileDataUsed={isProfileDataUsed}
         isConsentGranted={isConsentGranted}
         redirectToConsentService={redirectToConsentService}
+        freshApprovedConsent={freshApprovedConsent}
       />
     </Stack>
   );

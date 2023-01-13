@@ -14,12 +14,15 @@ import { ConsentSituation } from '../../api/services/consent';
 import { ConsentDataSource } from '../../constants/ConsentDataSource';
 import { getEnumKeyFromValue } from '../../utils';
 
+let consentNotStored = true;
+
 interface ConsentContextState<ConsentDataSource> {
   dataSource: ConsentDataSource;
   consentSituation: ConsentSituation;
   isConsentInitialized: boolean;
   isConsentGranted: boolean;
   redirectToConsentService: () => void;
+  freshApprovedConsent: boolean;
 }
 
 // Default context state
@@ -32,6 +35,7 @@ function getDefaultContextState(
     isConsentInitialized: false,
     isConsentGranted: false,
     redirectToConsentService: () => {},
+    freshApprovedConsent: false,
   };
 }
 
@@ -94,6 +98,8 @@ function getConsentProvider(
       )}`;
 
       const storedConsentToken = sessionStorage.getItem(consentStoreKey);
+      consentNotStored = storedConsentToken === null;
+
       const responseSituation = await api.consent.checkConsent(
         dataSource,
         storedConsentToken
@@ -138,6 +144,7 @@ function getConsentProvider(
           isConsentInitialized,
           isConsentGranted,
           redirectToConsentService,
+          freshApprovedConsent: isConsentGranted && consentNotStored,
         }}
       >
         {children}
