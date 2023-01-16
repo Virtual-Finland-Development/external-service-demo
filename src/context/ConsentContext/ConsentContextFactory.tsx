@@ -126,8 +126,6 @@ function getConsentProvider(
     const queryParams = useMemo(() => new URLSearchParams(search), [search]);
     const clearQueryParamsFromUrl = queryParams.get('clear');
 
-    console.log(sessionStorage.getItem('consentInitializedWithinApp'));
-
     /**
      * On a query param: 'clear', remove query params from the current URL.
      * @TODO: maybe refactor to some general hook handler
