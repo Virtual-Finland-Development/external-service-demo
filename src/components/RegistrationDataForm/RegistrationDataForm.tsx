@@ -40,6 +40,9 @@ import { useModal } from '../../context/ModalContext/ModalContext';
 // components
 import PdfForm from '../PdfForm/PdfForm';
 
+// api
+import api from '../../api';
+
 function getCountryValue(list: CountryOption[], itemId: string) {
   if (!list) return undefined;
   return list.find(i => i.id === itemId)?.englishName || undefined;
@@ -170,16 +173,32 @@ export default function RegistrationDataForm(props: Props) {
             <PdfForm
               profileData={values as ProfileFormData}
               disableModalClose={() => setModalCloseDisabled(true)}
-              sendCallback={() => {
-                closeModal();
-                setIsPdfSent(true);
-                toast({
-                  title: 'Registration form was sent successfully',
-                  status: 'success',
-                  position: 'top-right',
-                  duration: 5000,
-                  isClosable: true,
-                });
+              sendCallback={async () => {
+                try {
+                  await api.user.sendRegStatus({
+                    statusName: 'foreigner_reg_form',
+                    statusValue: 'SENT',
+                  });
+                  closeModal();
+                  setIsPdfSent(true);
+                  toast({
+                    title: 'Registration form was sent successfully',
+                    status: 'success',
+                    position: 'top-right',
+                    duration: 5000,
+                    isClosable: true,
+                  });
+                } catch (error: any) {
+                  console.log(error);
+                  toast({
+                    title: 'Registration form could not be sent',
+                    description: error?.message || 'Something went wrong',
+                    status: 'error',
+                    position: 'top-right',
+                    duration: 5000,
+                    isClosable: true,
+                  });
+                }
               }}
             />
           ),

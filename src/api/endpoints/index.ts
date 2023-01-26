@@ -12,3 +12,7 @@ export const USERS_API_BASE_URL = process.env.REACT_APP_USERS_API_BASE_URL
 export const TESTBED_API_BASE_URL = process.env.REACT_APP_TESTBED_API_BASE_URL
   ? removeTrailingSlash(process.env.REACT_APP_TESTBED_API_BASE_URL)
   : 'http://localhost:3003';
+
+export const STATUS_API_BASE_URL = process.env.REACT_APP_STATUS_API_BASE_URL
+  ? removeTrailingSlash(process.env.REACT_APP_STATUS_API_BASE_URL)
+  : 'http://0.0.0.0:5747';

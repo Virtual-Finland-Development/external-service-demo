@@ -26,6 +26,22 @@ export async function get(consentToken?: string) {
   );
 }
 
+export function getRegStatus() {
+  return axiosInstance.post(
+    `${TESTBED_API_BASE_URL}/testbed/productizers/fetch-user-status-info`
+  );
+}
+
+export function sendRegStatus(payload: {
+  statusName: string;
+  statusValue: string;
+}) {
+  return axiosInstance.post(
+    `${TESTBED_API_BASE_URL}/testbed/productizers/update-user-status-info`,
+    payload
+  );
+}
+
 export async function getConsents() {
   return axiosInstance.get(`${USERS_API_BASE_URL}/user/consents`);
 }

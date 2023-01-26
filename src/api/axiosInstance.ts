@@ -28,6 +28,8 @@ const USERS_API_URLS = [
 
 const TESTBED_API_URLS = [
   `${TESTBED_API_BASE_URL}/testbed/productizers/user-profile`,
+  `${TESTBED_API_BASE_URL}/testbed/productizers/fetch-user-status-info`,
+  `${TESTBED_API_BASE_URL}/testbed/productizers/update-user-status-info`,
 ];
 
 // Axios request interceptor. Pass token to request Authorization for selected routes, if found.

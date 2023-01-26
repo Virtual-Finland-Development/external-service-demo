@@ -68,6 +68,7 @@ export default function PdfForm(props: Props) {
       }
     }, 1000);
   };
+
   useEffect(() => {
     loadDataFromApiAndFillPdf();
   }, [loadDataFromApiAndFillPdf]);
