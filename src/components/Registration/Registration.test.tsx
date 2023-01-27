@@ -21,7 +21,7 @@ describe('<Registration />', () => {
     sessionStorage.clear();
   });
 
-  test('No user profile consebt given, user sees an approve button', async () => {
+  test('No user profile consent given, user sees an approve button', async () => {
     customRender1(
       <ConsentProvider>
         <Registration />
