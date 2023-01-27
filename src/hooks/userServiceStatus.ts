@@ -2,11 +2,18 @@ import { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
-// hooks
-// import useErrorToast from './useErrorToast';
-
 // api
 import api from '../api';
+
+// only custom 'Status information not found' error should be silenced
+function shouldShowError(error: any) {
+  return (
+    error.response.status !== 404 ||
+    (error.message.status === 404 && !error?.response?.data?.data?.message) ||
+    (error.response.data.data.message &&
+      error.response.data.data.message !== 'Status information not found')
+  );
+}
 
 export default function useServiceStatus() {
   const [error, setError] = useState<any>(null);
@@ -19,8 +26,7 @@ export default function useServiceStatus() {
       refetchOnWindowFocus: false,
       retry: false,
       onError: (error: any) => {
-        console.log(error);
-        if (error.response.status !== 404) {
+        if (shouldShowError(error)) {
           setError(error);
         }
       },
