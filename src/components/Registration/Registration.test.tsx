@@ -103,15 +103,9 @@ describe('<Registration />', () => {
 
     const sendOnlyButton = await screen.findByText('Send only');
     expect(sendOnlyButton).toBeInTheDocument();
+    userEvent.click(sendOnlyButton);
 
-    // to tell the unit test that timers will update component's state
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    act(() => {
-      userEvent.click(sendOnlyButton);
-      jest.runAllTimers();
-    });
-
-    const sentHeader = screen.getByRole('heading', {
+    const sentHeader = await screen.findByRole('heading', {
       name: /registration sent!/i,
     });
 

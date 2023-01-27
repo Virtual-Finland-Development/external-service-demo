@@ -172,33 +172,12 @@ export default function RegistrationDataForm(props: Props) {
           content: (
             <PdfForm
               profileData={values as ProfileFormData}
-              disableModalClose={() => setModalCloseDisabled(true)}
-              sendCallback={async () => {
-                try {
-                  await api.user.sendRegStatus({
-                    statusName: 'foreigner_reg_form',
-                    statusValue: 'SENT',
-                  });
-                  closeModal();
-                  setIsPdfSent(true);
-                  toast({
-                    title: 'Registration form was sent successfully',
-                    status: 'success',
-                    position: 'top-right',
-                    duration: 5000,
-                    isClosable: true,
-                  });
-                } catch (error: any) {
-                  console.log(error);
-                  toast({
-                    title: 'Registration form could not be sent',
-                    description: error?.message || 'Something went wrong',
-                    status: 'error',
-                    position: 'top-right',
-                    duration: 5000,
-                    isClosable: true,
-                  });
-                }
+              disableModalClose={isDisabled =>
+                setModalCloseDisabled(isDisabled)
+              }
+              sendCallback={() => {
+                closeModal();
+                setIsPdfSent(true);
               }}
             />
           ),
@@ -209,7 +188,7 @@ export default function RegistrationDataForm(props: Props) {
         console.log(e);
       }
     },
-    [closeModal, openModal, setModalCloseDisabled, toast]
+    [closeModal, openModal, setModalCloseDisabled]
   );
 
   /**

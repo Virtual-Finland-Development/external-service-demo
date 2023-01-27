@@ -7,6 +7,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useToast,
 } from '@chakra-ui/react';
 import { EmailIcon } from '@chakra-ui/icons';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -15,6 +16,8 @@ import { createPdfFrom } from '../../services/PdfService';
 import { ProfileFormData } from '../../@types';
 
 import Loading from '../Loading/Loading';
+
+import api from '../../api';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -28,7 +31,7 @@ function downloadPdf(file: Blob) {
 
 interface Props {
   profileData: ProfileFormData | undefined;
-  disableModalClose: () => void;
+  disableModalClose: (isDisabled: boolean) => void;
   sendCallback: () => void;
 }
 
@@ -37,6 +40,8 @@ export default function PdfForm(props: Props) {
 
   const [file, setFile] = useState<Blob>();
   const [loading, setLoading] = useState<boolean>(false);
+
+  const toast = useToast();
 
   const pdfScale = useBreakpointValue(
     {
@@ -56,18 +61,45 @@ export default function PdfForm(props: Props) {
     });
   }, [profileData]);
 
-  const onSendClick = (download: boolean) => {
-    disableModalClose();
-    setLoading(true);
+  const onSendClick = useCallback(
+    async (download: boolean) => {
+      disableModalClose(true);
+      setLoading(true);
 
-    setTimeout(() => {
-      sendCallback();
+      try {
+        await api.user.sendRegStatus({
+          statusName: 'foreigner_reg_form',
+          statusValue: 'SENT',
+        });
 
-      if (file && download) {
-        downloadPdf(file);
+        toast({
+          title: 'Registration form was sent successfully',
+          status: 'success',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true,
+        });
+
+        if (file && download) {
+          downloadPdf(file);
+        }
+
+        sendCallback();
+      } catch (error: any) {
+        disableModalClose(false);
+        setLoading(false);
+        toast({
+          title: 'Registration form could not be sent',
+          description: error?.message || 'Something went wrong',
+          status: 'error',
+          position: 'top-right',
+          duration: 5000,
+          isClosable: true,
+        });
       }
-    }, 1000);
-  };
+    },
+    [disableModalClose, file, sendCallback, toast]
+  );
 
   useEffect(() => {
     loadDataFromApiAndFillPdf();
@@ -75,7 +107,7 @@ export default function PdfForm(props: Props) {
 
   return (
     <Flex flexDirection="column" position="relative">
-      {loading && <Loading asOverlay />}
+      {loading && <Loading asOverlay data-testid="loading" />}
       <SizeMe monitorWidth>
         {({ size }) => (
           <Flex alignItems="center" justifyContent="center">
