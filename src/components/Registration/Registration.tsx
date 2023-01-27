@@ -1,6 +1,8 @@
 import { Flex, Stack, useToast } from '@chakra-ui/react';
 import { useCallback, useContext, useState } from 'react';
 
+import { StatusRecord, StatusValue } from '../../@types';
+
 // context
 import { useAppContext } from '../../context/AppContext/AppContext';
 
@@ -8,11 +10,13 @@ import { useAppContext } from '../../context/AppContext/AppContext';
 import useCountries from '../../hooks/useCountries';
 import useLanguages from '../../hooks/useLanguages';
 import useOccupations from '../../hooks/useOccupations';
+import useServiceStatus from '../../hooks/userServiceStatus';
 
 // components
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Loading from '../Loading/Loading';
 import RegistrationDataForm from '../RegistrationDataForm/RegistrationDataForm';
+import StatusInfo from './StatusInfo';
 
 // api
 import api from '../../api';
@@ -41,11 +45,17 @@ export default function Registration() {
   const { data: countries, isLoading: countriesLoading } = useCountries();
   const { data: occupations, isLoading: occupationsLoading } = useOccupations();
   const { data: languages, isLoading: languagesLoading } = useLanguages();
+  const {
+    data: status,
+    isLoading: regStatusLoading,
+    refetch: fetchStatus,
+  } = useServiceStatus();
 
-  const listsLoading =
+  const isLoading =
     countriesLoading ||
     occupationsLoading ||
     languagesLoading ||
+    regStatusLoading ||
     !isConsentInitialized;
 
   const toast = useToast();
@@ -75,7 +85,7 @@ export default function Registration() {
     }
   }, [consentSituation.consentToken, setUserProfile, toast]);
 
-  if (listsLoading) {
+  if (isLoading) {
     return (
       <Flex justifyContent="center" mt={6}>
         <Loading />
@@ -93,6 +103,10 @@ export default function Registration() {
     );
   }
 
+  if (status && status.statusValue !== StatusValue.SENT) {
+    return <StatusInfo {...status} />;
+  }
+
   return (
     <Stack alignItems="center">
       <RegistrationDataForm
@@ -107,6 +121,7 @@ export default function Registration() {
         isConsentGranted={isConsentGranted}
         redirectToConsentService={redirectToConsentService}
         freshApprovedConsent={freshApprovedConsent}
+        fetchStatus={fetchStatus}
       />
     </Stack>
   );

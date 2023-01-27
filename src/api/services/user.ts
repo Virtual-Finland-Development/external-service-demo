@@ -1,7 +1,7 @@
 import axiosInstance from '../axiosInstance';
 
 // types
-import { UserProfile } from '../../@types';
+import { UserProfile, StatusRecord } from '../../@types';
 
 // endpoints
 import { TESTBED_API_BASE_URL, USERS_API_BASE_URL } from '../endpoints';
@@ -26,10 +26,12 @@ export async function get(consentToken?: string) {
   );
 }
 
-export function getRegStatus() {
-  return axiosInstance.post(
-    `${TESTBED_API_BASE_URL}/testbed/productizers/fetch-user-status-info`
+export async function getRegStatus(): Promise<StatusRecord> {
+  const { data } = await axiosInstance.post(
+    `${TESTBED_API_BASE_URL}/testbed/productizers/fetch-user-status-info`,
+    { statusName: 'foreigner_reg_form' }
   );
+  return data;
 }
 
 export function sendRegStatus(payload: {
