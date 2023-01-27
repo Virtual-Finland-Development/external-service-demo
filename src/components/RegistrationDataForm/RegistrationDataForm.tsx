@@ -40,9 +40,6 @@ import { useModal } from '../../context/ModalContext/ModalContext';
 // components
 import PdfForm from '../PdfForm/PdfForm';
 
-// api
-import api from '../../api';
-
 function getCountryValue(list: CountryOption[], itemId: string) {
   if (!list) return undefined;
   return list.find(i => i.id === itemId)?.englishName || undefined;

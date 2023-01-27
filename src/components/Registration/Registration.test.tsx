@@ -2,7 +2,6 @@ import userEvent from '@testing-library/user-event';
 import { ConsentDataSource } from '../../constants/ConsentDataSource';
 import { getConsentContext } from '../../context/ConsentContext/ConsentContextFactory';
 import {
-  act,
   customRender1,
   screen,
   waitFor,
