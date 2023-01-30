@@ -22,7 +22,7 @@ function getProgressSettings(statusValue: string) {
         infoHeader: 'Waiting for completion!',
         infoText:
           'Your registration has been received and is waiting for completion, please contact the service provider for further instructions.',
-        Icon: <WarningIcon boxSize="50px" color="teal.500" />,
+        Icon: <WarningIcon boxSize="50px" color="orange.500" />,
       };
     case StatusValue.READY:
       return {
