@@ -1,7 +1,7 @@
 import { Flex, Stack, useToast } from '@chakra-ui/react';
 import { useCallback, useContext, useState } from 'react';
 
-import { StatusRecord, StatusValue } from '../../@types';
+import { StatusValue } from '../../@types';
 
 // context
 import { useAppContext } from '../../context/AppContext/AppContext';
