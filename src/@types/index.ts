@@ -110,3 +110,18 @@ export interface LanguageOption {
   id: string;
   englishName: string;
 }
+export interface StatusRecord {
+  id: string;
+  statusName: string;
+  statusValue: string;
+  updatedAt: string;
+  userId: string;
+  userEmail: string;
+}
+
+export enum StatusValue {
+  SENT = 'SENT',
+  PROCESSING = 'PROCESSING',
+  WAITING_FOR_COMPLETION = 'WAITING_FOR_COMPLETION',
+  READY = 'READY',
+}

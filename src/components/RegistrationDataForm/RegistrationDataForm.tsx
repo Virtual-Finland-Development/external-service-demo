@@ -169,17 +169,12 @@ export default function RegistrationDataForm(props: Props) {
           content: (
             <PdfForm
               profileData={values as ProfileFormData}
-              disableModalClose={() => setModalCloseDisabled(true)}
+              disableModalClose={isDisabled =>
+                setModalCloseDisabled(isDisabled)
+              }
               sendCallback={() => {
                 closeModal();
                 setIsPdfSent(true);
-                toast({
-                  title: 'Registration form was sent successfully',
-                  status: 'success',
-                  position: 'top-right',
-                  duration: 5000,
-                  isClosable: true,
-                });
               }}
             />
           ),
@@ -190,7 +185,7 @@ export default function RegistrationDataForm(props: Props) {
         console.log(e);
       }
     },
-    [closeModal, openModal, setModalCloseDisabled, toast]
+    [closeModal, openModal, setModalCloseDisabled]
   );
 
   /**

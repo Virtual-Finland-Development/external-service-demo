@@ -142,4 +142,16 @@ export const handlers = [
       ])
     );
   }),
+  rest.post(
+    `${TESTBED_API_BASE_URL}/testbed/productizers/update-user-status-info`,
+    (req, res, ctx) => {
+      return res(ctx.json({}));
+    }
+  ),
+  rest.post(
+    `${TESTBED_API_BASE_URL}/testbed/productizers/fetch-user-status-info`,
+    (req, res, ctx) => {
+      return res(ctx.json(undefined));
+    }
+  ),
 ];
