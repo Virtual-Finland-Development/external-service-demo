@@ -45,11 +45,7 @@ export default function Registration() {
   const { data: countries, isLoading: countriesLoading } = useCountries();
   const { data: occupations, isLoading: occupationsLoading } = useOccupations();
   const { data: languages, isLoading: languagesLoading } = useLanguages();
-  const {
-    data: status,
-    isLoading: regStatusLoading,
-    refetch: fetchStatus,
-  } = useServiceStatus();
+  const { data: status, isLoading: regStatusLoading } = useServiceStatus();
 
   const isLoading =
     countriesLoading ||
@@ -121,7 +117,6 @@ export default function Registration() {
         isConsentGranted={isConsentGranted}
         redirectToConsentService={redirectToConsentService}
         freshApprovedConsent={freshApprovedConsent}
-        fetchStatus={fetchStatus}
       />
     </Stack>
   );

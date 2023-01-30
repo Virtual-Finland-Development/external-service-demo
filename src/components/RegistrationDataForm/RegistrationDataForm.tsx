@@ -94,17 +94,12 @@ interface Props {
   isConsentGranted: boolean;
   redirectToConsentService: () => void;
   freshApprovedConsent: boolean;
-  fetchStatus: () => void;
 }
 
 export default function RegistrationDataForm(props: Props) {
   const { userProfile } = useAppContext();
-  const {
-    isConsentGranted,
-    redirectToConsentService,
-    freshApprovedConsent,
-    fetchStatus,
-  } = props;
+  const { isConsentGranted, redirectToConsentService, freshApprovedConsent } =
+    props;
 
   const [isPdfSent, setIsPdfSent] = useState<boolean>(false);
   const { fetchUserProfile, lists, isLoading, isProfileDataUsed } = props;
@@ -180,7 +175,6 @@ export default function RegistrationDataForm(props: Props) {
               sendCallback={() => {
                 closeModal();
                 setIsPdfSent(true);
-                fetchStatus();
               }}
             />
           ),
@@ -191,7 +185,7 @@ export default function RegistrationDataForm(props: Props) {
         console.log(e);
       }
     },
-    [closeModal, fetchStatus, openModal, setModalCloseDisabled]
+    [closeModal, openModal, setModalCloseDisabled]
   );
 
   /**
