@@ -58,7 +58,7 @@ export default function Registration() {
 
   /**
    * Fetch user profile.
-   * User has given immigrationDataConsent already, profile can be fetched.
+   * User has given profile consent already, profile can be fetched.
    */
   const fetchUserProfile = useCallback(async () => {
     setProfileLoading(true);

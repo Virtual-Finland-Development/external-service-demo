@@ -44,10 +44,6 @@ export function sendRegStatus(payload: {
   );
 }
 
-export async function getConsents() {
-  return axiosInstance.get(`${USERS_API_BASE_URL}/user/consents`);
-}
-
 export async function patch(payload: Partial<UserProfile>) {
   return axiosInstance.patch(`${USERS_API_BASE_URL}/user`, payload);
 }

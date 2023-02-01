@@ -189,7 +189,7 @@ export default function RegistrationDataForm(props: Props) {
   );
 
   /**
-   * Handle modal open for asking 'immigrationDataConsent', before profile fetch.
+   * Handle modal open for asking profile consent, before profile fetch.
    * If consent already given, user can deny the consent.
    */
   const handleConsentModalOpen = useCallback(() => {
