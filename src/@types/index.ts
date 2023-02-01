@@ -50,7 +50,6 @@ export interface UserProfile {
   nativeLanguageCode: string;
   gender: string;
   dateOfBirth: string;
-  immigrationDataConsent: boolean;
   occupations: Occupation[];
 }
 

@@ -31,7 +31,6 @@ const mockUser = {
   regions: ['01', '02'],
   created: '2022-10-12T12:05:46.6262126Z',
   modified: '2022-10-12T12:05:46.6262127Z',
-  immigrationDataConsent: true,
 };
 
 /**
@@ -93,9 +92,6 @@ export const handlers = [
       return res(ctx.json(mockUser));
     }
   ),
-  rest.get(`${USERS_API_BASE_URL}/user/consents`, (req, res, ctx) => {
-    return res(ctx.json({ immigrationDataConsent: true }));
-  }),
   rest.patch(`${USERS_API_BASE_URL}/user`, (req, res, ctx) => {
     return res(ctx.json(mockUser));
   }),
