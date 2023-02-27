@@ -33,7 +33,7 @@ export default function AuthRedirect() {
   const queryParams = useMemo(() => new URLSearchParams(search), [search]);
   const eventParam = queryParams.get('event');
   const authProviderParam = queryParams.get('provider');
-  const successParam = queryParams.get('success');
+  const successParam = queryParams.get('success') === 'true';
   const messageParam = queryParams.get('message');
 
   const loginCodeParam = eventParam === "login" && successParam && queryParams.get('loginCode');

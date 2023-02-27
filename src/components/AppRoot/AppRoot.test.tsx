@@ -2,7 +2,7 @@ import userEvent from '@testing-library/user-event';
 import {
   customRender1,
   customRender2,
-  screen,
+  screen
 } from '../../testing/testing-library-utils';
 import AppRoot from './AppRoot';
 
@@ -51,7 +51,7 @@ describe('Authentication based rendering', () => {
 
   test('Should log in to the application, when login redirect from Auth GW', async () => {
     customRender2(<AppRoot />, {
-      initialEntries: ['/auth-redirect?provider=testbed&loginCode=123'],
+      initialEntries: ['/auth-redirect?provider=testbed&event=login&success=true&loginCode=123'],
     });
 
     // form header visibile when user has authenticated
