@@ -9,9 +9,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
-  Input,
-  Link,
-  Radio,
+  Input, Radio,
   RadioGroup,
   Stack,
   Text
@@ -201,11 +199,6 @@ export default function RegistrationDataForm(props: Props) {
               : 'You have previously given your consent to access your profile data in Access to Finland Service.'}
           </Text>
           <Stack spacing={6} direction={['column', 'row']}>
-            {isConsentGranted && (
-              <Link color="gray.500" href='https://consent.testbed.fi' isExternal>
-                Revoke consent <ExternalLinkIcon />
-              </Link>
-            )}
             <Button
               colorScheme="blue"
               w="full"
@@ -222,6 +215,12 @@ export default function RegistrationDataForm(props: Props) {
             >
               {!isConsentGranted ? 'Approve' : 'Pre-fill'}
             </Button>
+
+            {isConsentGranted && (
+              <a target="_blank" href='https://consent.testbed.fi' rel="noreferrer">
+                Revoke consent <ExternalLinkIcon />
+              </a>
+            )}
           </Stack>
         </Stack>
       ),
