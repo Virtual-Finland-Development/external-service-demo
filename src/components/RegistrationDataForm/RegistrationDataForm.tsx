@@ -1,4 +1,4 @@
-import { CheckCircleIcon, CheckIcon, ViewIcon } from '@chakra-ui/icons';
+import { CheckCircleIcon, CheckIcon, ExternalLinkIcon, ViewIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -10,11 +10,11 @@ import {
   FormLabel,
   Heading,
   Input,
+  Link,
   Radio,
   RadioGroup,
   Stack,
-  Text,
-  useToast,
+  Text
 } from '@chakra-ui/react';
 import { format, parseISO } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
@@ -30,7 +30,7 @@ import {
   ProfileFormData,
   RegistrationIdentityType,
   Sex,
-  UserProfile,
+  UserProfile
 } from '../../@types';
 
 // context
@@ -156,8 +156,6 @@ export default function RegistrationDataForm(props: Props) {
     }
   }, [lists, isConsentGranted, userProfile, reset]);
 
-  const toast = useToast();
-
   /**
    * Handle form submit, open PDF preview.
    */
@@ -204,22 +202,9 @@ export default function RegistrationDataForm(props: Props) {
           </Text>
           <Stack spacing={6} direction={['column', 'row']}>
             {isConsentGranted && (
-              <Button
-                w="full"
-                colorScheme="red"
-                variant="outline"
-                onClick={() => {
-                  toast({
-                    title: 'Warning',
-                    description: 'Consent revoke not implemented yet',
-                    status: 'warning',
-                    duration: 5000,
-                    isClosable: true,
-                  });
-                }}
-              >
-                Revoke consent
-              </Button>
+              <Link color="gray.500" href='https://consent.testbed.fi' isExternal>
+                Revoke consent <ExternalLinkIcon />
+              </Link>
             )}
             <Button
               colorScheme="blue"
@@ -242,7 +227,6 @@ export default function RegistrationDataForm(props: Props) {
       ),
     });
   }, [
-    toast,
     closeModal,
     fetchUserProfile,
     isConsentGranted,
