@@ -52,12 +52,23 @@ jobs:
           stack: dev
           resource: url
           access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      - name: codesets url from Pulumi
+        if: ${{ inputs.environment }}
+        uses: Virtual-Finland-Development/pulumi-outputs-action@v1
+        id: codesets-url
+        with:
+          organization: virtualfinland
+          project: codesets
+          stack: ${{ inputs.environment }}
+          resource: url
+          access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Build application
         run: npm run build
         env:
           REACT_APP_AUTH_GW_BASE_URL: ${{ steps.auth-gw-url.outputs.resource-output }}
           REACT_APP_USERS_API_BASE_URL: ${{ steps.users-api-url.outputs.resource-output }}
           REACT_APP_TESTBED_API_BASE_URL: ${{ steps.testbed-api-url.outputs.resource-output }}
+          REACT_APP_CODESETS_BASE_URL: ${{ steps.codesets-url.outputs.resource-output }}
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
