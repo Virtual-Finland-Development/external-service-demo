@@ -8,7 +8,7 @@ import api from '../api';
 
 export default function useLanguages() {
   const languagesQuery = useQuery(['languages'], async () => {
-    const response = await api.user.getLanguages();
+    const response = await api.codesets.getLanguages();
     return response.data as LanguageOption[];
   });
 

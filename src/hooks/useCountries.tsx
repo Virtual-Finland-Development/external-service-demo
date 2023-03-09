@@ -8,7 +8,7 @@ import api from '../api';
 
 export default function useCountries() {
   const countriesQuery = useQuery(['countries'], async () => {
-    const response = await api.user.getCountries();
+    const response = await api.codesets.getCountries();
     return response.data as CountryOption[];
   });
 
