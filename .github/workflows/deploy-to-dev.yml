@@ -17,12 +17,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
         run: npm ci
       - name: auth-gw url from Pulumi
@@ -81,6 +75,9 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     environment: dev
+    permissions:
+      id-token: write
+      contents: read
     env:
       PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
     steps:
@@ -90,18 +87,27 @@ jobs:
         with:
           name: Application_Artifact
           path: ./public/
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
         run: npm ci
         working-directory: ./infra
       - name: Set artifact path in Pulumi config
         working-directory: ./infra
         run: pulumi config -s virtualfinland/dev set artifactPath ../public/
+      - name: Get IAM role from Pulumi
+        uses: Virtual-Finland-Development/pulumi-outputs-action@v1
+        id: infra-iam-role
+        with:
+          organization: virtualfinland
+          project: infrastructure
+          stack: dev
+          resource: DeployerIAMRole
+          access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ steps.infra-iam-role.outputs.resource-output }}
+          role-session-name: external-service-demo
       - name: Run Pulumi deployment
         uses: pulumi/actions@v3
         with:
