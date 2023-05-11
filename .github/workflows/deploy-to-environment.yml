@@ -103,21 +103,12 @@ jobs:
       - name: Set artifact path in Pulumi config
         working-directory: ./infra
         run: pulumi config set artifactPath ../public/
-      - name: Get IAM role from Pulumi
-        uses: Virtual-Finland-Development/pulumi-outputs-action@v1
-        id: infra-iam-role
-        with:
-          organization: virtualfinland
-          project: infrastructure
-          stack: ${{ inputs.environment }}
-          resource: DeployerIAMRole
-          access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: Virtual-Finland-Development/infrastructure/.github/actions/configure-aws-credentials@main
         with:
+          environment: ${{ inputs.environment }}
           aws-region: ${{ secrets.AWS_REGION }}
-          role-to-assume: ${{ steps.infra-iam-role.outputs.resource-output }}
-          role-session-name: external-service-demo
+          pulumi-access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Run Pulumi deployment
         working-directory: ./infra
         run: pulumi up -y

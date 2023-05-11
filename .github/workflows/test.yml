@@ -30,26 +30,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-      - name: Get IAM role from Pulumi
-        uses: Virtual-Finland-Development/pulumi-outputs-action@v1
-        id: infra-iam-role
-        with:
-          organization: virtualfinland
-          project: infrastructure
-          stack: dev
-          resource: DeployerIAMRole
-          access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: Virtual-Finland-Development/infrastructure/.github/actions/configure-aws-credentials@main
         with:
+          environment: dev
           aws-region: ${{ secrets.AWS_REGION }}
-          role-to-assume: ${{ steps.infra-iam-role.outputs.resource-output }}
-          role-session-name: external-service-demo-test
+          pulumi-access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Install dependencies
         working-directory: ./infra
         run: npm ci
       - name: Preview Pulumi
-        uses: pulumi/actions@v3
+        uses: pulumi/actions@v4
         with:
           work-dir: ./infra
           command: preview
