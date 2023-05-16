@@ -14,12 +14,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
         run: npm ci
       - name: Run tests
@@ -27,6 +21,9 @@ jobs:
   preview-pulumi:
     name: Preview pulumi
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
@@ -34,16 +31,16 @@ jobs:
         with:
           node-version: '16.x'
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: Virtual-Finland-Development/infrastructure/.github/actions/configure-aws-credentials@main
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          environment: dev
           aws-region: ${{ secrets.AWS_REGION }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          pulumi-access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Install dependencies
         working-directory: ./infra
         run: npm ci
       - name: Preview Pulumi
-        uses: pulumi/actions@v3
+        uses: pulumi/actions@v4
         with:
           work-dir: ./infra
           command: preview

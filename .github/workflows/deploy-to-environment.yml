@@ -18,12 +18,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
         run: npm ci
       - name: auth-gw url from Pulumi
@@ -84,6 +78,9 @@ jobs:
     name: Deploy to S3
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     environment: ${{ inputs.environment }}
     env:
       PULUMI_ORGANIZATION: virtualfinland
@@ -95,14 +92,8 @@ jobs:
         with:
           name: Application_Artifact
           path: ./public/
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install Pulumi CLI
-        uses: pulumi/setup-pulumi@v2
+        uses: pulumi/actions@v4
       - name: Install dependencies
         working-directory: ./infra
         run: npm ci
@@ -112,6 +103,12 @@ jobs:
       - name: Set artifact path in Pulumi config
         working-directory: ./infra
         run: pulumi config set artifactPath ../public/
+      - name: Configure AWS credentials
+        uses: Virtual-Finland-Development/infrastructure/.github/actions/configure-aws-credentials@main
+        with:
+          environment: ${{ inputs.environment }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          pulumi-access-token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - name: Run Pulumi deployment
         working-directory: ./infra
         run: pulumi up -y
